@@ -1,4 +1,4 @@
-# ResumeSpark 🚀  
+# ResumeSpark   
 ### AI-Powered Resume Builder & Career Roadmap Platform
 
 ResumeSpark is a modern, **ATS-friendly resume builder** that combines clean, professional templates with **LLM-powered guidance** to help users create interview-ready resumes and structured career preparation plans.
@@ -7,9 +7,9 @@ It goes beyond resume building by offering **resume analysis**, **job descriptio
 
 ---
 
-## ✨ Key Features
+##  Key Features
 
-### 🔍 LLM Resume Review
+###  LLM Resume Review
 - Paste your resume text and receive **AI-generated feedback**
 - Bullet-point suggestions on:
   - Clarity & structure  
@@ -19,7 +19,7 @@ It goes beyond resume building by offering **resume analysis**, **job descriptio
 
 ---
 
-### 📊 Resume ↔ Job Description Match
+###  Resume ↔ Job Description Match
 - Compare your resume against a target Job Description
 - Get:
   - **Match percentage**
@@ -29,7 +29,7 @@ It goes beyond resume building by offering **resume analysis**, **job descriptio
 
 ---
 
-### 🎯 Dream-Role Roadmap Generator
+###  Dream-Role Roadmap Generator
 - Enter any role (e.g. `SDE Intern at Meta`, `Senior Salesforce Developer`)
 - Instantly receive:
   - 3-month structured learning roadmap
@@ -39,7 +39,7 @@ It goes beyond resume building by offering **resume analysis**, **job descriptio
 
 ---
 
-### 🧾 Resume Template Gallery
+###  Resume Template Gallery
 - Multiple ATS-friendly resume templates:
   - Classic  
   - Modern  
@@ -51,7 +51,7 @@ It goes beyond resume building by offering **resume analysis**, **job descriptio
 
 ---
 
-## 🧑‍💻 Tech Stack
+## Tech Stack
 
 ### Frontend
 - HTML  
@@ -69,7 +69,7 @@ It goes beyond resume building by offering **resume analysis**, **job descriptio
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 
@@ -96,7 +96,7 @@ resumespark/
 
 ---
 
-## 🛠️ Setup & Installation
+##  Setup & Installation
 
 ### 1️⃣ Clone the Repository
 ```bash
@@ -120,7 +120,7 @@ OPENAI_API_KEY=sk-your-key-here
 PORT=5001
 ```
 
-> 🔒 `.env` is already added to `.gitignore` to keep your API key secure.
+>  `.env` is already added to `.gitignore` to keep your API key secure.
 
 Start the backend server:
 
@@ -159,9 +159,9 @@ http://127.0.0.1:5500/resumespark/frontend/index.html
 
 ---
 
-## 🚀 How to Use
+##  How to Use
 
-### 📝 LLM Resume Review
+###  LLM Resume Review
 
 1. Navigate to **LLM Resume Review**
 2. Paste your resume text
@@ -170,7 +170,7 @@ http://127.0.0.1:5500/resumespark/frontend/index.html
 
 ---
 
-### 📈 Resume ↔ Job Match
+###  Resume ↔ Job Match
 
 1. Open **Resume ↔ Job Match**
 2. Paste the Job Description
@@ -183,7 +183,7 @@ http://127.0.0.1:5500/resumespark/frontend/index.html
 
 ---
 
-### 🎯 Dream-Role Roadmap
+###  Dream-Role Roadmap
 
 1. Enter your target role
 2. Click **Generate Roadmap** for a detailed plan
@@ -191,7 +191,7 @@ http://127.0.0.1:5500/resumespark/frontend/index.html
 
 ---
 
-### 🎨 Template Preview
+###  Template Preview
 
 1. Scroll to **Templates**
 2. Click **Preview**
@@ -199,7 +199,7 @@ http://127.0.0.1:5500/resumespark/frontend/index.html
 
 ---
 
-## 🎨 UI & Design Highlights
+##  UI & Design Highlights
 
 * Card-based layout for AI tools
 * Scrollable response containers
@@ -208,7 +208,7 @@ http://127.0.0.1:5500/resumespark/frontend/index.html
 
 ---
 
-## 🔮 Future Enhancements
+##  Future Enhancements
 
 * Resume upload (PDF / DOCX parsing)
 * Authentication & dashboard
@@ -218,7 +218,7 @@ http://127.0.0.1:5500/resumespark/frontend/index.html
 
 ---
 
-## 🤝 Contributing
+##  Contributing
 
 Contributions are welcome!
 
@@ -238,9 +238,8 @@ Contributions are welcome!
    ```bash
    git push origin feature/your-feature
    ```
-5. Open a Pull Request 🚀
+5. Open a Pull Request 
 
 ---
 
-Just tell me 👌
-```
+
