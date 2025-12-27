@@ -23,3 +23,8 @@ app.use("/api/roadmap", roadmapRouter);  // POST /api/roadmap
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+app.get("/", (req, res) => {
+  res.send("ResumeSpark Backend is running 🚀");
+});
+
