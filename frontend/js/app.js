@@ -1,4 +1,4 @@
-const apiBase = "http://localhost:5001/api";
+const apiBase = "https://resumespark.onrender.com/";
 
 document.addEventListener("DOMContentLoaded", () => {
   const runReview = document.getElementById("runReview");
