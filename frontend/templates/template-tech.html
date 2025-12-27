@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Tech — Engineer Resume Template · ResumeSpark</title>
+  <!-- Tailwind CSS (browser build) -->
+       <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+  <!-- html2pdf for PDF export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+  <style>
+    .resume-sheet { width: 800px; }
+    [data-cloak] { display: none !important; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased p-6">
+  <div class="max-w-[1400px] mx-auto">
+    <header class="mb-6 flex items-center justify-between">
+      <div>
+        <h1 class="text-2xl font-extrabold text-blue-600">Tech — Engineer</h1>
+        <p class="text-sm text-slate-500">Two-column layout focused on engineering impact · ResumeSpark</p>
+      </div>
+      <div class="flex gap-3">
+        <button id="downloadPdf" class="px-4 py-2 bg-blue-600 text-white rounded shadow hover:brightness-95">Download PDF</button>
+        <button id="resetBtn" class="px-4 py-2 bg-white border border-slate-200 rounded">Reset</button>
+      </div>
+    </header>
+
+    <main class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <!-- LEFT SIDE: Inputs -->
+      <section class="space-y-4">
+        <div class="bg-white p-4 rounded-lg shadow">
+          <h2 class="text-lg font-semibold text-blue-600 mb-2">Personal</h2>
+          <div class="grid grid-cols-1 gap-3">
+            <input id="fullName" placeholder="Full name (e.g., Riya Tyagi)" class="w-full p-2 border rounded" />
+            <input id="title" placeholder="Title (e.g., Software Engineer)" class="w-full p-2 border rounded" />
+            <input id="location" placeholder="Location" class="w-full p-2 border rounded" />
+            <input id="email" placeholder="Email" class="w-full p-2 border rounded" />
+            <input id="phone" placeholder="Phone" class="w-full p-2 border rounded" />
+            <input id="website" placeholder="Website / Portfolio" class="w-full p-2 border rounded" />
+          </div>
+        </div>
+
+        <div class="bg-white p-4 rounded-lg shadow">
+          <h2 class="text-lg font-semibold text-blue-600 mb-2">Summary</h2>
+          <textarea id="summary" rows="4" placeholder="Short professional summary highlighting engineering impact" class="w-full p-2 border rounded"></textarea>
+        </div>
+
+        <div class="bg-white p-4 rounded-lg shadow">
+          <h2 class="text-lg font-semibold text-blue-600 mb-2">Experience</h2>
+          <div id="experienceList" class="space-y-3">
+            <template id="expTpl">
+              <div class="border p-3 rounded bg-slate-50">
+                <input class="exp-role w-full p-1 border rounded mb-1" placeholder="Role — Company (Dates)" />
+                <textarea class="exp-desc w-full p-1 border rounded" rows="2" placeholder="Key achievements (use metrics)"></textarea>
+              </div>
+            </template>
+          </div>
+          <div class="mt-3 flex gap-2">
+            <button id="addExp" class="px-3 py-1 bg-blue-600 text-white rounded">Add Experience</button>
+            <button id="removeExp" class="px-3 py-1 bg-white border rounded">Remove</button>
+          </div>
+        </div>
+
+        <div class="bg-white p-4 rounded-lg shadow">
+          <h2 class="text-lg font-semibold text-blue-600 mb-2">Education</h2>
+          <input id="education" placeholder="Degree — Institute (Year)" class="w-full p-2 border rounded" />
+        </div>
+
+        <div class="bg-white p-4 rounded-lg shadow">
+          <h2 class="text-lg font-semibold text-blue-600 mb-2">Skills & Tech</h2>
+          <input id="skills" placeholder="Comma separated (e.g., React, Node.js, CI/CD)" class="w-full p-2 border rounded" />
+        </div>
+
+        <div class="bg-white p-4 rounded-lg shadow">
+          <h2 class="text-lg font-semibold text-blue-600 mb-2">Projects</h2>
+          <div id="projectsList" class="space-y-2">
+            <template id="projTpl">
+              <div class="border p-3 rounded bg-slate-50">
+                <input class="proj-title w-full p-1 border rounded mb-1" placeholder="Project Title — tech stack" />
+                <textarea class="proj-desc w-full p-1 border rounded" rows="2" placeholder="One-line impact / metrics"></textarea>
+              </div>
+            </template>
+          </div>
+          <div class="mt-3 flex gap-2">
+            <button id="addProj" class="px-3 py-1 bg-blue-600 text-white rounded">Add Project</button>
+            <button id="removeProj" class="px-3 py-1 bg-white border rounded">Remove</button>
+          </div>
+        </div>
+
+        <div class="bg-white p-4 rounded-lg shadow">
+          <h2 class="text-lg font-semibold text-blue-600 mb-2">Social / Links</h2>
+          <input id="linkedin" placeholder="LinkedIn URL" class="w-full p-2 border rounded" />
+          <input id="github" placeholder="GitHub URL" class="w-full p-2 border rounded mt-2" />
+          <input id="otherLink" placeholder="Portfolio / Other Link" class="w-full p-2 border rounded mt-2" />
+        </div>
+      </section>
+
+      <!-- RIGHT SIDE: Live Preview -->
+      <aside class="flex justify-center">
+        <div id="preview" class="resume-sheet bg-white p-6 rounded shadow" data-cloak>
+          <header>
+            <h1 id="pvName" class="text-2xl font-bold text-blue-600">Full name</h1>
+            <p id="pvTitle" class="text-sm text-blue-700 font-semibold">Software Engineer</p>
+            <p id="pvContact" class="text-xs text-slate-500 mt-2">email · phone · location</p>
+          </header>
+
+          <section class="mt-4 grid grid-cols-3 gap-4">
+            <div class="col-span-2">
+              <h3 class="text-sm font-semibold text-blue-600">Summary</h3>
+              <p id="pvSummary" class="text-sm text-slate-700 mt-1">Short professional summary that demonstrates engineering impact and measurable outcomes.</p>
+
+              <div id="pvExperience" class="mt-4">
+                <h3 class="text-sm font-semibold text-blue-600">Experience</h3>
+                <div id="pvExpItems" class="mt-2 space-y-2 text-sm text-slate-700"></div>
+              </div>
+
+              <div id="pvProjects" class="mt-4">
+                <h3 class="text-sm font-semibold text-blue-600">Projects</h3>
+                <div id="pvProjItems" class="mt-2 space-y-2 text-sm text-slate-700"></div>
+              </div>
+            </div>
+
+            <aside class="col-span-1">
+              <div>
+                <h3 class="text-sm font-semibold text-blue-600">Education</h3>
+                <p id="pvEducation" class="text-sm text-slate-700 mt-1">Degree — Institute</p>
+              </div>
+
+              <div class="mt-4">
+                <h3 class="text-sm font-semibold text-blue-600">Skills</h3>
+                <div id="pvSkills" class="mt-2 text-sm text-blue-700 space-y-1"></div>
+              </div>
+
+              <div class="mt-4">
+                <h3 class="text-sm font-semibold text-blue-600">Links</h3>
+                <div id="pvLinks" class="mt-2 text-xs space-y-1"></div>
+              </div>
+            </aside>
+          </section>
+
+          <footer class="mt-6 text-xs text-slate-400">Generated with · ResumeSpark</footer>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+<script>
+const qs = s => document.querySelector(s);
+const qsa = s => document.querySelectorAll(s);
+
+const fullName = qs('#fullName');
+const title = qs('#title');
+const locationEl = qs('#location');
+const email = qs('#email');
+const phone = qs('#phone');
+const website = qs('#website');
+const summary = qs('#summary');
+const skills = qs('#skills');
+const education = qs('#education');
+const linkedin = qs('#linkedin');
+const github = qs('#github');
+const otherLink = qs('#otherLink');
+
+const pvName = qs('#pvName');
+const pvTitle = qs('#pvTitle');
+const pvContact = qs('#pvContact');
+const pvSummary = qs('#pvSummary');
+const pvExpItems = qs('#pvExpItems');
+const pvProjItems = qs('#pvProjItems');
+const pvEducation = qs('#pvEducation');
+const pvSkills = qs('#pvSkills');
+const pvLinks = qs('#pvLinks');
+const preview = qs('#preview');
+
+const expTpl = qs('#expTpl');
+const expList = qs('#experienceList');
+const addExp = qs('#addExp');
+const removeExp = qs('#removeExp');
+const projTpl = qs('#projTpl');
+const projList = qs('#projectsList');
+const addProj = qs('#addProj');
+const removeProj = qs('#removeProj');
+
+// Dynamic Add/Remove
+function createExp() {
+  const node = expTpl.content.cloneNode(true);
+  expList.appendChild(node);
+  bindInputs();
+}
+function createProj() {
+  const node = projTpl.content.cloneNode(true);
+  projList.appendChild(node);
+  bindInputs();
+}
+addExp.addEventListener('click', createExp);
+addProj.addEventListener('click', createProj);
+removeExp.addEventListener('click', () => { if (expList.children.length > 1) expList.removeChild(expList.lastElementChild); updatePreview(); });
+removeProj.addEventListener('click', () => { if (projList.children.length > 1) projList.removeChild(projList.lastElementChild); updatePreview(); });
+createExp(); createProj();
+
+// Input Bind
+function bindInputs() {
+  [fullName, title, locationEl, email, phone, website, summary, skills, education, linkedin, github, otherLink].forEach(el => {
+    el && el.addEventListener('input', updatePreview);
+  });
+  qsa('.exp-role').forEach(inp => inp.addEventListener('input', updatePreview));
+  qsa('.exp-desc').forEach(inp => inp.addEventListener('input', updatePreview));
+  qsa('.proj-title').forEach(inp => inp.addEventListener('input', updatePreview));
+  qsa('.proj-desc').forEach(inp => inp.addEventListener('input', updatePreview));
+}
+
+function escapeHtml(s) {
+  return (s + '').replace(/[&<>\"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+// Update Preview
+function updatePreview() {
+  pvName.textContent = fullName.value || 'Full name';
+  pvTitle.textContent = title.value || 'Software Engineer';
+  const contactParts = [email.value, phone.value, locationEl.value].filter(Boolean);
+  pvContact.textContent = contactParts.join(' · ') || 'email · phone · location';
+
+  pvSummary.textContent = summary.value || 'Short professional summary that demonstrates engineering impact and measurable outcomes.';
+
+  pvExpItems.innerHTML = '';
+  const roles = qsa('.exp-role');
+  const descs = qsa('.exp-desc');
+  for (let i = 0; i < roles.length; i++) {
+    const role = roles[i].value.trim();
+    const desc = descs[i].value.trim();
+    if (role || desc) {
+      const el = document.createElement('div');
+      el.className = 'pb-1';
+      el.innerHTML = `<div class='font-semibold text-blue-600'>${escapeHtml(role)}</div><div class='text-sm text-slate-700'>${escapeHtml(desc)}</div>`;
+      pvExpItems.appendChild(el);
+    }
+  }
+
+  pvProjItems.innerHTML = '';
+  const ptitles = qsa('.proj-title');
+  const pdescs = qsa('.proj-desc');
+  for (let i = 0; i < ptitles.length; i++) {
+    const t = ptitles[i].value.trim();
+    const d = pdescs[i].value.trim();
+    if (t || d) {
+      const el = document.createElement('div');
+      el.className = 'pb-1';
+      el.innerHTML = `<div class='font-semibold text-blue-600'>${escapeHtml(t)}</div><div class='text-sm text-slate-700'>${escapeHtml(d)}</div>`;
+      pvProjItems.appendChild(el);
+    }
+  }
+
+  pvEducation.textContent = education.value || 'Degree — Institute (Year)';
+
+  pvSkills.innerHTML = '';
+  (skills.value || '').split(',').map(s => s.trim()).filter(Boolean).forEach(s => {
+    const tag = document.createElement('div');
+    tag.className = 'text-sm inline-block mr-2 mb-1 px-2 py-0.5 border border-blue-500 rounded text-blue-700';
+    tag.textContent = s;
+    pvSkills.appendChild(tag);
+  });
+
+  pvLinks.innerHTML = '';
+  [[linkedin, 'LinkedIn'], [github, 'GitHub'], [otherLink, 'Portfolio'], [website, 'Website']].forEach(([el, label]) => {
+    if (el.value) {
+      const a = document.createElement('div');
+      a.innerHTML = `<a href='${escapeHtml(el.value)}' target='_blank' class='underline text-blue-600 font-medium'>${label}</a>`;
+      pvLinks.appendChild(a);
+    }
+  });
+}
+
+// PDF Generator
+qs('#downloadPdf').addEventListener('click', () => {
+  const node = preview.cloneNode(true);
+  const opt = {
+    margin: 10,
+    filename: (fullName.value ? fullName.value.replace(/\\s+/g, '_') : 'resume') + '.pdf',
+    image: { type: 'jpeg', quality: 1 },
+    html2canvas: { scale: 3, useCORS: true, allowTaint: true },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  };
+  html2pdf().set(opt).from(node).save();
+});
+
+// Reset
+qs('#resetBtn').addEventListener('click', () => {
+  if (!confirm('Reset all fields?')) return;
+  qsa('input').forEach(i => i.value = '');
+  qsa('textarea').forEach(t => t.value = '');
+  while (expList.children.length > 1) expList.removeChild(expList.lastElementChild);
+  while (projList.children.length > 1) projList.removeChild(projList.lastElementChild);
+  updatePreview();
+});
+
+bindInputs();
+updatePreview();
+preview.removeAttribute('data-cloak');
+</script>
+</body>
+</html>

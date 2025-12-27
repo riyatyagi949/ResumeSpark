@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Data Scientist — Metrics Focused Resume · ResumeSpark</title>
+      <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .gradient-text {
+      background: linear-gradient(to right, #2563eb, #06b6d4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    @media print {.no-print{display:none!important;}}
+    .preview-shadow { box-shadow: 0 6px 30px rgba(0,0,0,0.08); }
+  </style>
+</head>
+<body class="bg-gradient-to-b from-blue-50 via-white to-cyan-50 text-gray-800">
+
+  <!-- HEADER -->
+  <header class="no-print bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-500 flex items-center justify-center text-white font-bold text-lg">DS</div>
+        <div>
+          <h1 class="text-lg font-semibold">ResumeSpark</h1>
+          <p class="text-xs text-gray-500">Data Scientist — Metrics Focused</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <button id="downloadPdf" class="bg-gradient-to-r from-blue-600 to-cyan-500 hover:opacity-90 text-white px-4 py-2 rounded-full text-sm font-medium shadow">Download PDF</button>
+        <button id="resetBtn" class="border border-gray-300 px-4 py-2 rounded-full text-sm">Reset</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto grid md:grid-cols-2 gap-8 p-6">
+
+    <!-- LEFT: INPUTS -->
+    <section class="space-y-6">
+
+      <!-- PERSONAL -->
+      <div class="bg-white rounded-2xl p-6 shadow-sm">
+        <h3 class="text-lg font-semibold gradient-text mb-3">Personal Information</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div class="flex flex-col items-center md:items-start">
+            <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-blue-400">
+              <img id="photoPreview" src="" alt="Photo" class="w-full h-full object-cover" />
+            </div>
+            <input id="photoInput" type="file" accept="image/*" class="mt-3 text-sm" />
+          </div>
+          <div class="col-span-2 space-y-2">
+            <input id="fullName" placeholder="Full Name (e.g., Riya Tyagi)" class="w-full border p-2 rounded text-sm" />
+            <input id="headline" placeholder="Data Scientist | ML Engineer" class="w-full border p-2 rounded text-sm" />
+            <textarea id="summary" rows="2" placeholder="Brief summary about your data-driven impact and technical expertise..." class="w-full border p-2 rounded text-sm"></textarea>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              <input id="email" placeholder="Email" class="border p-2 rounded text-sm" />
+              <input id="phone" placeholder="Phone" class="border p-2 rounded text-sm" />
+              <input id="location" placeholder="City, Country" class="border p-2 rounded text-sm" />
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              <input id="linkedin" placeholder="LinkedIn" class="border p-2 rounded text-sm" />
+              <input id="github" placeholder="GitHub" class="border p-2 rounded text-sm" />
+              <input id="kaggle" placeholder="Kaggle / Portfolio" class="border p-2 rounded text-sm" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SKILLS -->
+      <div class="bg-white rounded-2xl p-6 shadow-sm">
+        <div class="flex justify-between items-center mb-2">
+          <h3 class="text-lg font-semibold gradient-text">Technical Skills</h3>
+          <button id="addSkill" class="text-blue-600 text-sm">+ Add</button>
+        </div>
+        <div id="skillList" class="flex flex-wrap gap-2">
+          <template id="skillTemplate">
+            <div class="skill-item border rounded px-2 py-1 flex items-center gap-2">
+              <input class="skill-input text-sm border-0 focus:outline-none" placeholder="Skill (e.g., Python, TensorFlow)" />
+              <button class="remove-skill text-red-500 text-xs">×</button>
+            </div>
+          </template>
+        </div>
+      </div>
+
+      <!-- EXPERIENCE -->
+      <div class="bg-white rounded-2xl p-6 shadow-sm">
+        <div class="flex justify-between items-center mb-3">
+          <h3 class="text-lg font-semibold gradient-text">Experience</h3>
+          <button id="addExp" class="text-blue-600 text-sm">+ Add</button>
+        </div>
+        <div id="expList" class="space-y-3">
+          <template id="expTemplate">
+            <div class="exp-item border rounded p-3 bg-blue-50/30">
+              <input class="exp-role w-full border p-1 rounded mb-1 text-sm" placeholder="Role (e.g., Data Scientist)" />
+              <input class="exp-org w-full border p-1 rounded mb-1 text-sm" placeholder="Company / Organization" />
+              <input class="exp-duration w-full border p-1 rounded mb-1 text-sm" placeholder="Duration (e.g., Jan 2023 – Present)" />
+              <textarea class="exp-desc w-full border p-1 rounded text-sm" rows="2" placeholder="Achievements with measurable outcomes..."></textarea>
+              <div class="text-right mt-1"><button class="remove-exp text-red-500 text-xs">Remove</button></div>
+            </div>
+          </template>
+        </div>
+      </div>
+
+      <!-- PROJECTS -->
+      <div class="bg-white rounded-2xl p-6 shadow-sm">
+        <div class="flex justify-between items-center mb-3">
+          <h3 class="text-lg font-semibold gradient-text">Data Science Projects</h3>
+          <button id="addProj" class="text-blue-600 text-sm">+ Add</button>
+        </div>
+        <div id="projList" class="space-y-3">
+          <template id="projTemplate">
+            <div class="proj-item border rounded p-3 bg-cyan-50/40">
+              <input class="proj-title w-full border p-1 rounded mb-1 text-sm" placeholder="Project Title" />
+              <textarea class="proj-desc w-full border p-1 rounded text-sm" rows="2" placeholder="Describe dataset, techniques, and impact (with metrics)..."></textarea>
+              <input class="proj-link w-full border p-1 rounded mb-1 text-sm" placeholder="Project Link (GitHub / Kaggle)" />
+              <div class="text-right mt-1"><button class="remove-proj text-red-500 text-xs">Remove</button></div>
+            </div>
+          </template>
+        </div>
+      </div>
+
+      <!-- PUBLICATIONS -->
+      <div class="bg-white rounded-2xl p-6 shadow-sm">
+        <div class="flex justify-between items-center mb-2">
+          <h3 class="text-lg font-semibold gradient-text">Publications</h3>
+          <button id="addPub" class="text-blue-600 text-sm">+ Add</button>
+        </div>
+        <div id="pubList" class="space-y-2">
+          <template id="pubTemplate">
+            <div class="pub-item border rounded p-2 flex items-center gap-2">
+              <input class="pub-input text-sm border-0 flex-1" placeholder="Publication title / citation link" />
+              <button class="remove-pub text-red-500 text-xs">×</button>
+            </div>
+          </template>
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHT PREVIEW -->
+    <aside>
+      <div id="preview" class="bg-white rounded-2xl p-6 preview-shadow border border-gray-200">
+        <header class="border-b pb-4 mb-4">
+          <div class="flex items-center gap-4">
+            <div class="w-20 h-20 rounded-full overflow-hidden border-4 border-blue-400">
+              <img id="pvPhoto" src="" alt="" class="w-full h-full object-cover" />
+            </div>
+            <div>
+              <h1 id="pvName" class="text-2xl font-bold text-gray-900">Full Name</h1>
+              <h2 id="pvHeadline" class="text-sm text-gray-600">Data Scientist</h2>
+              <p id="pvSummary" class="text-sm mt-2 text-gray-700 leading-snug">Short professional summary appears here.</p>
+            </div>
+          </div>
+          <div class="mt-3 text-xs text-gray-700 space-y-1">
+            <div id="pvEmail">email@example.com</div>
+            <div id="pvPhone">+91 12345 67890</div>
+            <div id="pvLocation">City, Country</div>
+          </div>
+          <div class="flex flex-wrap gap-2 mt-3 text-xs text-blue-600 underline">
+            <a id="pvLinkedin" href="#">LinkedIn</a>
+            <a id="pvGithub" href="#">GitHub</a>
+            <a id="pvKaggle" href="#">Kaggle</a>
+          </div>
+        </header>
+
+        <section>
+          <h3 class="text-lg font-semibold gradient-text mb-2">Technical Skills</h3>
+          <div id="pvSkills" class="flex flex-wrap gap-2 mb-4"></div>
+
+          <h3 class="text-lg font-semibold gradient-text mb-2">Experience</h3>
+          <ul id="pvExp" class="space-y-2 mb-4"></ul>
+
+          <h3 class="text-lg font-semibold gradient-text mb-2">Data Science Projects</h3>
+          <ul id="pvProj" class="space-y-2 mb-4"></ul>
+
+          <h3 class="text-lg font-semibold gradient-text mb-2">Publications</h3>
+          <ul id="pvPub" class="space-y-1"></ul>
+        </section>
+      </div>
+    </aside>
+  </main>
+
+  <script>
+    const qs=s=>document.querySelector(s),qsa=s=>document.querySelectorAll(s);
+
+    // Update preview text
+    function updateProfile(){
+      qs('#pvName').textContent=qs('#fullName').value||'Full Name';
+      qs('#pvHeadline').textContent=qs('#headline').value||'Data Scientist';
+      qs('#pvSummary').textContent=qs('#summary').value||'Short professional summary appears here.';
+      qs('#pvEmail').textContent=qs('#email').value||'email@example.com';
+      qs('#pvPhone').textContent=qs('#phone').value||'+91 12345 67890';
+      qs('#pvLocation').textContent=qs('#location').value||'City, Country';
+      qs('#pvLinkedin').href=qs('#linkedin').value||'#';
+      qs('#pvGithub').href=qs('#github').value||'#';
+      qs('#pvKaggle').href=qs('#kaggle').value||'#';
+    }
+
+    // Photo upload
+    const photoInput=qs('#photoInput'),photoPrev=qs('#photoPreview'),pvPhoto=qs('#pvPhoto');
+    photoInput.addEventListener('change',e=>{
+      const f=e.target.files[0];if(!f)return;
+      const r=new FileReader();r.onload=ev=>{
+        photoPrev.src=ev.target.result;pvPhoto.src=ev.target.result;
+      };r.readAsDataURL(f);
+    });
+
+    // Dynamic repeater
+    function setup(addBtn,list,template,removeSel){
+      const add=qs(addBtn),lst=qs(list),tmpl=qs(template);
+      add.addEventListener('click',()=>{
+        const n=tmpl.content.cloneNode(true);
+        lst.appendChild(n);refresh();
+      });
+      lst.addEventListener('click',e=>{
+        if(e.target.matches(removeSel)){e.target.closest('div').remove();refresh();}
+      });
+    }
+
+    setup('#addSkill','#skillList','#skillTemplate','.remove-skill');
+    setup('#addExp','#expList','#expTemplate','.remove-exp');
+    setup('#addProj','#projList','#projTemplate','.remove-proj');
+    setup('#addPub','#pubList','#pubTemplate','.remove-pub');
+    qs('#addSkill').click();qs('#addExp').click();qs('#addProj').click();
+
+    // Refresh preview lists
+    function refresh(){
+      const pvSkills=qs('#pvSkills');pvSkills.innerHTML='';
+      qsa('#skillList .skill-item').forEach(i=>{
+        const s=i.querySelector('.skill-input').value;
+        if(s){
+          const sp=document.createElement('span');
+          sp.className='bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs';
+          sp.textContent=s;
+          pvSkills.appendChild(sp);
+        }
+      });
+
+      const pvExp=qs('#pvExp');pvExp.innerHTML='';
+      qsa('#expList .exp-item').forEach(i=>{
+        const r=i.querySelector('.exp-role').value,o=i.querySelector('.exp-org').value,d=i.querySelector('.exp-duration').value,t=i.querySelector('.exp-desc').value;
+        if(r||o||d||t){
+          const li=document.createElement('li');
+          li.innerHTML=`<div class='font-medium text-blue-700'>${r}</div><div class='text-xs text-gray-600'>${o} · ${d}</div><div class='text-xs text-gray-500'>${t}</div>`;
+          pvExp.appendChild(li);
+        }
+      });
+
+      const pvProj=qs('#pvProj');pvProj.innerHTML='';
+      qsa('#projList .proj-item').forEach(i=>{
+        const t=i.querySelector('.proj-title').value,d=i.querySelector('.proj-desc').value,l=i.querySelector('.proj-link').value;
+        if(t||d){
+          const li=document.createElement('li');
+          li.innerHTML=`<div class='font-medium text-cyan-700'>${t}${l?` <a href='${l}' target='_blank' class='text-blue-500 underline text-xs ml-1'>[link]</a>`:''}</div><div class='text-xs text-gray-600'>${d}</div>`;
+          pvProj.appendChild(li);
+        }
+      });
+
+      const pvPub=qs('#pvPub');pvPub.innerHTML='';
+      qsa('#pubList .pub-item').forEach(i=>{
+        const t=i.querySelector('.pub-input').value;
+        if(t){
+          const li=document.createElement('li');
+          li.className='text-xs text-gray-700';
+          li.textContent=t;
+          pvPub.appendChild(li);
+        }
+      });
+    }
+
+    document.body.addEventListener('input',()=>{updateProfile();refresh();});
+
+    // PDF
+    qs('#downloadPdf').addEventListener('click',()=>{
+      const opt={margin:0.2,filename:(qs('#fullName').value||'Data_Scientist_Resume')+'.pdf',image:{type:'jpeg',quality:1},html2canvas:{scale:2,useCORS:true},jsPDF:{unit:'in',format:'a4',orientation:'portrait'}};
+      html2pdf().set(opt).from(qs('#preview')).save();
+    });
+
+    // Reset
+    qs('#resetBtn').addEventListener('click',()=>{
+      if(!confirm('Reset all fields?'))return;
+      qsa('input,textarea').forEach(i=>i.value='');
+      qsa('#skillList .skill-item,#expList .exp-item,#projList .proj-item,#pubList .pub-item').forEach(n=>n.remove());
+      qs('#addSkill').click();qs('#addExp').click();qs('#addProj').click();
+      updateProfile();refresh();photoPrev.src='';pvPhoto.src='';
+    });
+
+    updateProfile();refresh();
+  </script>
+</body>
+</html>

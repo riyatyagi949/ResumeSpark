@@ -1,0 +1,681 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ResumeSpark — Build your resume</title>
+  <script src="./js/app.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style>
+    @keyframes floatUp {
+      0% { transform: translateY(6px); opacity: 0.96; }
+      50% { transform: translateY(-8px); opacity: 1; }
+      100% { transform: translateY(6px); opacity: 0.96; }
+    }
+    .float-anim { animation: floatUp 6s ease-in-out infinite; }
+
+    @keyframes glowPulse {
+      0% { box-shadow: 0 6px 18px rgba(14,165,233,0.06); transform: translateY(0); }
+      50% { box-shadow: 0 18px 36px rgba(99,102,241,0.08); transform: translateY(-6px); }
+      100% { box-shadow: 0 6px 18px rgba(14,165,233,0.06); transform: translateY(0); }
+    }
+    .glow-pulse { animation: glowPulse 5s infinite ease-in-out; }
+
+    .card-hover { transition: transform .25s ease, box-shadow .25s ease; }
+    .card-hover:hover { transform: translateY(-8px); box-shadow: 0 18px 40px rgba(2,6,23,0.08); }
+
+    .ribbon {
+      background: linear-gradient(90deg,#06b6d4,#7c3aed);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      font-weight: 800;
+    }
+
+    .multi-h1 span { display:inline-block; transform-origin: left; transition: transform .4s ease; }
+    .multi-h1 span:hover { transform: translateY(-6px) scale(1.02); }
+
+    .template-thumb { object-fit: cover; width:100%; height:160px; border-radius:.6rem; }
+    .avatar { width:56px; height:56px; border-radius:9999px; object-fit:cover; border:2px solid rgba(255,255,255,0.9); }
+
+    .h-c-1 { color:#0ea5e9 } 
+    .h-c-2 { color:#7c3aed } 
+    .h-c-3 { color:#10b981 } 
+    .h-c-4 { color:#f97316 } 
+    .h-c-5 { color:#ef4444 } 
+    .h-c-6 { color:#6366f1 }
+
+    /* Responsive tweaks */
+    @media (max-width: 900px) {
+      .template-thumb { height: 140px; }
+    }
+    @media (max-width: 520px) {
+      .template-thumb { height: 120px; }
+    }
+
+    /* Fancy gradient cards for LLM tools */
+    .tool-gradient-1 { background: linear-gradient(135deg,#e0f2fe, #e9d5ff); }
+    .tool-gradient-2 { background: linear-gradient(135deg,#ecfccb, #dbeafe); }
+    .tool-gradient-3 { background: linear-gradient(135deg,#fff7ed, #fee2e2); }
+
+    /* subtle tilt on hero preview */
+    .tilt { transform: rotate(-1deg); transition: transform .35s ease; }
+    .tilt:hover { transform: rotate(0deg) scale(1.02); }
+  </style>
+</head>
+<body class="min-h-screen bg-gray-50 text-slate-800 antialiased">
+
+  <!-- Top feature strip -->
+  <div class="bg-gradient-to-r from-sky-600 to-violet-600 text-white py-2 text-sm">
+    <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row gap-2 sm:gap-0 items-center justify-between">
+      <div class="flex items-center gap-4">
+        <span class="font-semibold">New —</span>
+        <span>LLM Resume Review • Resume ↔ Job Match • Dream-Role Roadmap • Smart PDF export</span>
+      </div>
+      <div class="text-xs opacity-90">Beta • Confidential • Works best on Chrome / Edge</div>
+    </div>
+  </div>
+
+  <!-- Navigation / Header -->
+  <nav class="bg-white shadow-sm sticky top-0 z-40">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-4">
+        <a href="/" class="text-2xl font-extrabold text-slate-800">ResumeSpark</a>
+        <span class="hidden md:inline text-sm text-slate-500">Smart builder • ATS-friendly templates • LLM-powered tips</span>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <!-- LLM feature buttons (animated) -->
+        <button id="btn-llm-review" class="px-3 py-2 rounded-md bg-gradient-to-r from-sky-100 to-violet-50 hover:from-sky-200 hover:to-violet-100 text-sm transform transition-shadow shadow-sm">LLM Resume Review</button>
+        <button id="btn-match" class="px-3 py-2 rounded-md bg-gradient-to-r from-emerald-100 to-sky-50 hover:from-emerald-200 hover:to-sky-100 text-sm">Resume ↔ Job Match</button>
+        <button id="btn-roadmap" class="px-3 py-2 rounded-md bg-gradient-to-r from-orange-50 to-rose-50 hover:from-orange-100 hover:to-rose-100 text-sm">Dream-Role Roadmap</button>
+
+        <!-- Auth links -->
+        <a href="signup.html" class="px-3 py-2 text-sm">Sign up</a>
+        <a href="signin.html" class="px-3 py-2 rounded-md bg-sky-600 text-white text-sm">Sign in</a>
+      </div>
+    </div>
+  </nav>
+<!-- Hero -->
+  <header class="hero-bg">
+    <div class="max-w-6xl mx-auto px-4 py-12 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+      <div>
+        <h1 class="text-4xl md:text-5xl font-extrabold leading-tight">
+          Build a resume that gets you noticed — <span class="text-sky-600">fast</span>.
+        </h1>
+        <p class="mt-4 text-lg text-slate-600">Choose a template, get AI-driven improvements, match to job descriptions and download ATS-friendly PDFs. ResumeSpark combines elegant templates with practical, LLM-powered feedback.</p>
+
+        <div class="mt-6 flex flex-wrap gap-3">
+          <a href="signup.html" class="px-5 py-3 rounded-lg bg-sky-600 text-white font-semibold shadow">Create Account — Free</a>
+          <a href="#templates" class="px-5 py-3 rounded-lg border border-slate-200 text-slate-700">Browse Templates</a>
+        </div>
+
+        <!-- quick bullets -->
+        <ul class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-slate-600">
+          <li>• 10 professional templates (ATS & design variants)</li>
+          <li>• LLM Review with suggested edits & action items</li>
+          <li>• Job-match score + targeted edits</li>
+          <li>• Dream-role learning roadmap & project ideas</li>
+        </ul>
+      </div>
+
+      <!-- right side hero preview (animated) -->
+      <div class="flex justify-center lg:justify-end">
+        <div class="w-full max-w-md card-hover float-anim bg-white p-4 rounded-2xl shadow-lg">
+          <img src="./assets/resume-preview.png" alt="resume preview" class="w-full rounded-lg" />
+          <div class="mt-4">
+            <div class="text-sm text-slate-500">Template: <span class="font-medium">Classic — Clean</span></div>
+            <h3 class="mt-2 font-semibold text-lg">Full-stack Developer</h3>
+            <p class="text-sm text-slate-600 mt-1">ResumeSpark preview • Live edits • Export PDF</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- floating feature badges -->
+    <div class="max-w-6xl mx-auto px-4 -mt-8 flex gap-8 overflow-x-auto pb-10 snap-x snap-mandatory">
+  <!-- LLM Resume Review -->
+  <div class="min-w-[400px] snap-center p-8 rounded-3xl shadow-2xl transform transition-all duration-700 hover:scale-110 hover:rotate-2 bg-gradient-to-br from-pink-500 via-fuchsia-500 to-purple-600 text-white flex items-center gap-8 card-hover cursor-pointer hover:shadow-pink-400/50 hover:shadow-2xl">
+    <img class="w-32 h-32 rounded-2xl bg-white/20 object-contain backdrop-blur-md shadow-lg" src="./assets/llm-review.png" alt="LLM review"/>
+    <div>
+      <div class="text-3xl font-extrabold tracking-wide drop-shadow-lg">LLM Resume Review</div>
+      <div class="text-lg opacity-90 mt-2">AI-powered insights & smart rewrites</div>
+    </div>
+  </div>
+
+  <!-- Resume ↔ Job Match -->
+  <div class="min-w-[400px] snap-center p-8 rounded-3xl shadow-2xl transform transition-all duration-700 hover:scale-110 hover:-rotate-2 bg-gradient-to-br from-blue-500 via-sky-500 to-cyan-500 text-white flex items-center gap-8 card-hover cursor-pointer hover:shadow-blue-400/50 hover:shadow-2xl">
+    <img class="w-32 h-32 rounded-2xl bg-white/20 object-contain backdrop-blur-md shadow-lg" src="./assets/resume-score.png" alt="score"/>
+    <div>
+      <div class="text-3xl font-extrabold tracking-wide drop-shadow-lg">Resume ↔ Job Match</div>
+      <div class="text-lg opacity-90 mt-2">Smart scoring & JD-specific feedback</div>
+    </div>
+  </div>
+
+  <!-- Dream-Role Roadmap -->
+  <div class="min-w-[400px] snap-center p-8 rounded-3xl shadow-2xl transform transition-all duration-700 hover:scale-110 hover:rotate-2 bg-gradient-to-br from-green-500 via-emerald-500 to-lime-500 text-white flex items-center gap-8 card-hover cursor-pointer hover:shadow-green-400/50 hover:shadow-2xl">
+    <img class="w-32 h-32 rounded-2xl bg-white/20 object-contain backdrop-blur-md shadow-lg" src="./assets/roadmap.png" alt="roadmap"/>
+    <div>
+      <div class="text-3xl font-extrabold tracking-wide drop-shadow-lg">Dream-Role Roadmap</div>
+      <div class="text-lg opacity-90 mt-2">Learn skills & build projects to grow</div>
+    </div>
+  </div>
+</div>
+
+  </header>
+
+  <!-- Templates (10 cards) -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-16">
+  <section id="templates" class="mb-24">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-12 text-center sm:text-left">
+      <h2 class="text-3xl md:text-4xl font-extrabold text-slate-800 leading-tight">
+        Explore <span class="text-sky-600">10 Professional Templates</span>
+      </h2>
+      <p class="text-slate-500 mt-3 sm:mt-0 text-sm md:text-base">
+        Choose a design that fits your style and profession
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8 sm:gap-10">
+      <!-- Template cards rendered dynamically by JS -->
+      <template id="tpl-card">
+        <div class="group bg-white rounded-3xl shadow-xl hover:shadow-3xl border border-slate-200 overflow-hidden transform transition-all duration-700 hover:scale-105 hover:-translate-y-2 cursor-pointer">
+          <div class="overflow-hidden rounded-t-3xl relative">
+            <img
+              class="template-thumb w-full aspect-[3/4] sm:h-[500px] lg:h-[600px] object-cover sm:object-contain bg-gray-50 transition-transform duration-700 group-hover:scale-110"
+              src=""
+              alt="Template Preview"
+              loading="lazy"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+          </div>
+   <div class="p-6 sm:p-8 text-center">
+  <div class="tpl-name font-semibold text-lg sm:text-xl text-slate-800"></div>
+  <div class="tpl-desc text-sm text-slate-500 mt-1 mb-4"></div>
+  <div class="flex justify-center gap-3 flex-wrap">
+    <a
+      class="px-4 py-2 border border-sky-500 text-sky-600 rounded-lg text-sm hover:bg-sky-50 transition-colors preview-link">
+      Preview
+    </a>
+  </div>
+</div>
+ </div>
+</template>
+</div>
+</section>
+</main>
+
+
+    <!-- LLM Tools section -->
+  <section id="tools" class="py-16 px-6 bg-gradient-to-br from-sky-50 via-white to-rose-50">
+  <!-- Animated Gradient Heading -->
+   <div class="text-center mb-12"> 
+    <h2
+      class="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-sky-500 via-emerald-500 to-rose-500 bg-clip-text text-transparent animate-pulse drop-shadow-lg">
+       AI-Powered Career Boost Tools
+    </h2>
+    <p class="text-slate-600 mt-3 text-sm md:text-base max-w-2xl mx-auto">
+      Smart, personalized, and interactive utilities to optimize your career growth — all in one place 
+    </p>
+  </div> 
+   
+<!-- Tools Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+<!-- LLM Resume Review -->
+<div
+  class="p-6 rounded-3xl bg-gradient-to-tr from-white to-sky-50 shadow-xl transform hover:scale-[1.03] hover:shadow-2xl transition-all duration-500">
+  <div class="flex items-start gap-5">
+    <div class="relative p-5 rounded-2xl bg-white/70 shadow-sm flex items-center justify-center">
+      <img src="https://cdn-icons-png.flaticon.com/512/4712/4712100.png" alt="LLM Icon"
+        class="w-14 h-14 object-contain" />
+      <span
+        class="absolute bottom-1 right-2 text-[10px] bg-sky-600 text-white px-2 py-0.5 rounded-full font-semibold tracking-wide">LLM</span>
+    </div>
+    <div class="flex-1">
+      <h3 class="text-xl font-bold text-slate-800">LLM Resume Review</h3>
+      <p class="mt-2 text-slate-600 leading-relaxed">
+        Paste your resume text and get AI‑driven rewrite suggestions and action steps to enhance clarity and impact.
+      </p>
+
+      <textarea id="resumeText" rows="6"
+        class="w-full mt-4 p-3 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-sky-500 outline-none resize-none"
+        placeholder="Paste your resume text here..."></textarea>
+
+      <button id="runReview"
+        class="mt-3 px-4 py-3 rounded-lg bg-gradient-to-r from-sky-600 to-violet-600 text-white font-semibold shadow hover:scale-105 transition-transform duration-300">
+        Run Review
+      </button>
+
+      <div id="reviewOutput"
+        class="mt-4 p-3 rounded-lg bg-white/70 border border-sky-100 text-sm text-slate-700 hidden max-h-64 overflow-y-auto">
+        <h4 class="font-semibold mb-2">AI Review Summary</h4>
+        <ul id="reviewList" class="list-disc list-inside space-y-1"></ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Resume ↔ Job Match -->
+<div
+  class="p-6 rounded-3xl bg-gradient-to-tr from-white to-emerald-50 shadow-xl transform hover:scale-[1.03] hover:shadow-2xl transition-all duration-500">
+  <div class="flex items-start gap-5">
+    <div class="relative p-5 rounded-2xl bg-white/70 shadow-sm flex items-center justify-center">
+      <img src="https://cdn-icons-png.flaticon.com/512/10043/10043550.png" alt="Job Match Icon"
+        class="w-14 h-14 object-contain" />
+      <span
+        class="absolute bottom-1 right-2 text-[10px] bg-emerald-600 text-white px-2 py-0.5 rounded-full font-semibold tracking-wide">MATCH</span>
+    </div>
+    <div class="flex-1">
+      <h3 class="text-xl font-bold text-slate-800">Resume ↔ Job Description Match</h3>
+      <p class="mt-2 text-slate-600 leading-relaxed">
+        Paste a job description and see a match score with suggested edits and missing keywords to improve alignment.
+      </p>
+
+      <textarea id="jobDesc" rows="5"
+        class="w-full mt-4 p-3 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 outline-none resize-none"
+        placeholder="Paste job description here..."></textarea>
+
+      <div class="mt-4 flex flex-wrap gap-3">
+        <button id="runMatch"
+          class="px-5 py-3 rounded-lg bg-gradient-to-r from-emerald-600 to-sky-500 text-white font-semibold shadow hover:scale-105 transition-transform duration-300">
+          Analyze Match
+        </button>
+        <button id="exampleJD"
+          class="px-5 py-3 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-50 font-medium transition-colors">
+          Use Example JD
+        </button>
+      </div>
+
+      <div class="mt-4 text-xs text-slate-500">
+        Works best with detailed job descriptions.
+      </div>
+
+      <!--  Scrollable AI output, same height as others -->
+      <div id="matchOutput"
+        class="mt-4 p-3 rounded-lg bg-white/70 border border-emerald-100 text-sm text-slate-700 hidden max-h-64 overflow-y-auto">
+        <h4 class="font-semibold mb-2">AI Match Feedback</h4>
+        <ul id="matchList" class="list-disc list-inside space-y-1"></ul>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Dream-Role Roadmap -->
+<div
+  class="p-6 rounded-3xl bg-gradient-to-tr from-white to-orange-50 shadow-xl transform hover:scale-[1.03] hover:shadow-2xl transition-all duration-500">
+  <div class="flex items-start gap-5">
+    <div class="relative p-5 rounded-2xl bg-white/70 shadow-sm flex items-center justify-center">
+      <img src="https://cdn-icons-png.flaticon.com/512/4319/4319048.png" alt="Roadmap Icon"
+        class="w-14 h-14 object-contain" />
+      <span
+        class="absolute bottom-1 right-2 text-[10px] bg-orange-500 text-white px-2 py-0.5 rounded-full font-semibold tracking-wide">PLAN</span>
+    </div>
+    <div class="flex-1">
+      <h3 class="text-xl font-bold text-slate-800">Dream-Role Roadmap</h3>
+      <p class="mt-2 text-slate-600 leading-relaxed">
+        Define your dream role and receive a roadmap with skills, projects, and prep tips to achieve it faster.
+      </p>
+
+      <input id="dreamRole"
+        class="mt-4 w-full p-3 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-orange-400 outline-none"
+        placeholder="e.g. Senior ML Engineer at FAANG" />
+
+      <div class="mt-4 flex flex-wrap gap-3">
+        <button id="runRoadmap"
+          class="px-5 py-3 rounded-lg bg-gradient-to-r from-orange-500 to-rose-500 text-white font-semibold shadow hover:scale-105 transition-transform duration-300">
+          Generate Roadmap
+        </button>
+        <button id="shortPlan"
+          class="px-5 py-3 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-50 font-medium transition-colors">
+          Quick 3-Month Plan
+        </button>
+      </div>
+
+      <div class="mt-4 text-xs text-slate-500">
+        Personalized plan based on your goal and experience.
+      </div>
+
+      <div id="roadmapOutput"
+        class="mt-4 p-3 rounded-lg bg-white/70 border border-orange-100 text-sm text-slate-700 hidden max-h-64 overflow-y-auto">
+        <h4 class="font-semibold mb-2">AI Roadmap</h4>
+        <ul id="roadmapList" class="list-disc list-inside space-y-1"></ul>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+<!-- Success Stories (animated)  -->
+  <section class="py-16 px-6 bg-gradient-to-br from-rose-50 via-white to-sky-50">
+  <!-- Vibrant Animated Heading -->
+  <div class="text-center mb-12">
+    <h2
+      class="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-pink-500 via-orange-500 to-emerald-500 bg-clip-text text-transparent animate-pulse drop-shadow-lg">
+       Inspiring Success Stories
+    </h2>
+    <p class="text-slate-600 mt-3 text-sm md:text-base max-w-2xl mx-auto">
+      Real people, real transformations — powered by ResumeSpark 
+    </p>
+  </div>
+
+  <!-- Success Stories Grid -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+    
+    <!-- Card 1 -->
+    <div class="relative rounded-3xl overflow-hidden shadow-lg group">
+      <img src="./assets/Aman.png" alt="Aman" class="w-full h-80 object-cover transform group-hover:scale-110 transition duration-500" />
+      <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent flex flex-col justify-end p-6">
+        <h3 class="text-white text-lg font-semibold">Aman K.</h3>
+        <p class="text-emerald-300 text-sm">Placed at Scale AI • Senior SWE</p>
+        <p class="text-slate-200 text-sm mt-2">“ResumeSpark helped me highlight measurable impact — I got interviews within days.”</p>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="relative rounded-3xl overflow-hidden shadow-lg group">
+      <img src="./assets/Priya.png" alt="Priya" class="w-full h-80 object-cover transform group-hover:scale-110 transition duration-500" />
+      <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent flex flex-col justify-end p-6">
+        <h3 class="text-white text-lg font-semibold">Priya R.</h3>
+        <p class="text-pink-300 text-sm">Data Analyst • Hired at Zeta</p>
+        <p class="text-slate-200 text-sm mt-2">“Job Match surfaced missing keywords — my resume reached the hiring manager.”</p>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="relative rounded-3xl overflow-hidden shadow-lg group">
+      <img src="./assets/rahul.png" alt="Rahul" class="w-full h-80 object-cover transform group-hover:scale-110 transition duration-500" />
+      <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent flex flex-col justify-end p-6">
+        <h3 class="text-white text-lg font-semibold">Rahul S.</h3>
+        <p class="text-orange-300 text-sm">Product Designer • Hired at Myntra</p>
+        <p class="text-slate-200 text-sm mt-2">“Design templates + ATS tweaks increased visibility — great experience.”</p>
+      </div>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="relative rounded-3xl overflow-hidden shadow-lg group">
+      <img src="./assets/kirti.png" alt="Sana" class="w-full h-80 object-cover transform group-hover:scale-110 transition duration-500" />
+      <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent flex flex-col justify-end p-6">
+        <h3 class="text-white text-lg font-semibold">Sana M.</h3>
+        <p class="text-rose-300 text-sm">ML Intern • Internship at OpenAI Partner</p>
+        <p class="text-slate-200 text-sm mt-2">“Roadmap gave me project ideas that I shipped — portfolio impressed interviewers.”</p>
+      </div>
+    </div>
+
+    <!-- Card 5 -->
+    <div class="relative rounded-3xl overflow-hidden shadow-lg group">
+      <img src="./assets/manu.png" alt="Manu" class="w-full h-80 object-cover transform group-hover:scale-110 transition duration-500" />
+      <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent flex flex-col justify-end p-6">
+        <h3 class="text-white text-lg font-semibold">Manu A.</h3>
+        <p class="text-violet-300 text-sm">Backend Engineer • Hired at Postgres Inc.</p>
+        <p class="text-slate-200 text-sm mt-2">“LLM rewrites turned bullet points into impact statements — recruiters noticed.”</p>
+      </div>
+    </div>
+
+    <!-- Card 6 -->
+    <div class="relative rounded-3xl overflow-hidden shadow-lg group">
+      <img src="./assets/Anshika.png" alt="Anshika" class="w-full h-80 object-cover transform group-hover:scale-110 transition duration-500" />
+      <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent flex flex-col justify-end p-6">
+        <h3 class="text-white text-lg font-semibold">Anshika T.</h3>
+        <p class="text-sky-300 text-sm">Frontend Dev • Hired at Flipkart</p>
+        <p class="text-slate-200 text-sm mt-2">“The PDF export kept layout intact and I sent it directly to recruiters.”</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+    <!-- FAQ (8-9) -->
+<section class="mb-20 relative overflow-hidden">
+  <!-- Animated Heading -->
+  <div class="text-center mb-10">
+    <h2 class="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-emerald-500 via-sky-500 to-purple-600 bg-clip-text text-transparent animate-pulse drop-shadow-lg">
+       Frequently Asked Questions
+    </h2>
+    <p class="text-slate-500 mt-2 text-sm md:text-base">Everything you need to know about our AI Resume tools</p>
+  </div>
+
+  <div class="space-y-4 max-w-3xl mx-auto relative z-10">
+    <!-- FAQ Card -->
+    <div class="faq-card bg-gradient-to-br from-white to-emerald-50 p-5 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300">
+      <button class="faq-btn flex justify-between w-full items-center text-left font-semibold text-slate-800 text-lg" onclick="toggleFAQ(this)">
+        <span>What is LLM Resume Review?</span>
+        <svg class="w-6 h-6 text-emerald-600 transition-transform duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </button>
+      <div class="faq-content mt-3 text-slate-600 text-sm hidden">Our LLM analyzes clarity, impact, ATS compatibility, and suggests concise rewrites with examples.</div>
+    </div>
+
+    <div class="faq-card bg-gradient-to-br from-white to-sky-50 p-5 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300">
+      <button class="faq-btn flex justify-between w-full items-center text-left font-semibold text-slate-800 text-lg" onclick="toggleFAQ(this)">
+        <span>Is my resume private?</span>
+        <svg class="w-6 h-6 text-sky-600 transition-transform duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </button>
+      <div class="faq-content mt-3 text-slate-600 text-sm hidden">Yes — uploaded resumes are private by default. We never share your content without consent.</div>
+    </div>
+
+    <div class="faq-card bg-gradient-to-br from-white to-violet-50 p-5 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300">
+      <button class="faq-btn flex justify-between w-full items-center text-left font-semibold text-slate-800 text-lg" onclick="toggleFAQ(this)">
+        <span>What file formats are supported?</span>
+        <svg class="w-6 h-6 text-violet-600 transition-transform duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </button>
+      <div class="faq-content mt-3 text-slate-600 text-sm hidden">PDF, DOCX, and plain text are supported for uploads and parsing.</div>
+    </div>
+
+    <div class="faq-card bg-gradient-to-br from-white to-rose-50 p-5 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300">
+      <button class="faq-btn flex justify-between w-full items-center text-left font-semibold text-slate-800 text-lg" onclick="toggleFAQ(this)">
+        <span>How accurate is the Job Match score?</span>
+        <svg class="w-6 h-6 text-rose-600 transition-transform duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </button>
+      <div class="faq-content mt-3 text-slate-600 text-sm hidden">The score is based on keyword + semantic overlap and suggests improvements to boost alignment.</div>
+    </div>
+
+    <div class="faq-card bg-gradient-to-br from-white to-orange-50 p-5 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300">
+      <button class="faq-btn flex justify-between w-full items-center text-left font-semibold text-slate-800 text-lg" onclick="toggleFAQ(this)">
+        <span>Can I download a PDF of my resume?</span>
+        <svg class="w-6 h-6 text-orange-600 transition-transform duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </button>
+      <div class="faq-content mt-3 text-slate-600 text-sm hidden">Yes — you can export your resume as PDF via client-side or server-side rendering.</div>
+    </div>
+
+    <div class="faq-card bg-gradient-to-br from-white to-fuchsia-50 p-5 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300">
+      <button class="faq-btn flex justify-between w-full items-center text-left font-semibold text-slate-800 text-lg" onclick="toggleFAQ(this)">
+        <span>Can I import LinkedIn data?</span>
+        <svg class="w-6 h-6 text-fuchsia-600 transition-transform duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </button>
+      <div class="faq-content mt-3 text-slate-600 text-sm hidden">Coming soon — LinkedIn import will be available after OAuth integration.</div>
+    </div>
+
+    <div class="faq-card bg-gradient-to-br from-white to-lime-50 p-5 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300">
+      <button class="faq-btn flex justify-between w-full items-center text-left font-semibold text-slate-800 text-lg" onclick="toggleFAQ(this)">
+        <span>How do I get the best results?</span>
+        <svg class="w-6 h-6 text-lime-600 transition-transform duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </button>
+      <div class="faq-content mt-3 text-slate-600 text-sm hidden">Use metrics, showcase achievements, and include relevant keywords from job descriptions.</div>
+    </div>
+  </div>
+
+  <!-- Decorative Animated Gradient Blobs -->
+  <div class="absolute -top-10 -right-20 w-64 h-64 bg-gradient-to-br from-emerald-300 to-sky-400 opacity-30 blur-3xl animate-pulse"></div>
+  <div class="absolute bottom-0 -left-20 w-64 h-64 bg-gradient-to-br from-pink-300 to-purple-400 opacity-30 blur-3xl animate-ping"></div>
+</section>
+
+    <!-- CTA -->
+    <!--  CTA Section -->
+<section class="relative mb-20">
+  <!-- Animated Gradient Blobs -->
+  <div class="absolute -top-20 -right-20 w-72 h-72 bg-gradient-to-br from-sky-300 to-indigo-400 opacity-40 blur-3xl animate-pulse"></div>
+  <div class="absolute bottom-0 -left-20 w-72 h-72 bg-gradient-to-br from-pink-300 to-rose-400 opacity-40 blur-3xl animate-ping"></div>
+
+  <!-- Main CTA Box -->
+  <div class="relative z-10 bg-gradient-to-r from-sky-100 via-violet-100 to-fuchsia-100 p-10 rounded-3xl shadow-2xl transform hover:scale-[1.02] transition-all duration-500 hover:shadow-sky-200/70">
+    <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+      <div>
+        <h3 class="text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-sky-600 via-violet-600 to-fuchsia-600 bg-clip-text text-transparent animate-text">
+          Ready to Build Your Perfect Resume?
+        </h3>
+        <p class="text-slate-700 mt-3 text-sm md:text-base">
+          Upload your resume and get a <span class="font-semibold text-sky-600">free AI-powered review</span> with actionable insights and score instantly.
+        </p>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a href="./signup.html"
+          class="px-6 py-3 rounded-xl bg-gradient-to-r from-sky-600 to-violet-600 text-white font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300">
+           Create Account
+        </a>
+        <a href="#templates"
+          class="px-6 py-3 rounded-xl border-2 border-sky-500 text-sky-700 font-semibold hover:bg-sky-500 hover:text-white transition-all duration-300">
+           Browse Templates
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Small Floating Text Animation -->
+  <div class="absolute left-1/2 -bottom-10 transform -translate-x-1/2 text-slate-500 text-xs tracking-wide animate-bounce">
+     No credit card required. Get started in seconds.
+  </div>
+</section>
+
+<!-- Add Tailwind Animate Gradient Text -->
+<style>
+  @keyframes gradientText {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  .animate-text {
+    background-size: 200% 200%;
+    animation: gradientText 6s ease infinite;
+  }
+</style>
+
+    <!-- Footer -->
+<footer class="relative mt-20 pt-16 pb-10 text-slate-200 bg-gradient-to-br from-emerald-600 via-sky-600 to-indigo-700 overflow-hidden">
+  <!-- Decorative Gradient Glow -->
+  <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+  <div class="absolute top-0 left-0 w-72 h-72 bg-emerald-400/30 rounded-full blur-3xl animate-pulse"></div>
+  <div class="absolute bottom-0 right-0 w-72 h-72 bg-sky-400/30 rounded-full blur-3xl animate-ping"></div>
+
+  <div class="relative z-10 max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-10">
+    <!-- Brand Section -->
+    <div>
+      <h3 class="text-3xl font-extrabold bg-gradient-to-r from-white to-sky-200 bg-clip-text text-transparent">ResumeSpark</h3>
+      <p class="mt-3 text-sm text-slate-100/80 leading-relaxed">
+        Make resumes smarter, faster, and more impactful — powered by AI to elevate your career journey.
+      </p>
+      <button onclick="scrollToTop()" class="mt-4 px-5 py-2 bg-white/20 backdrop-blur-md rounded-lg text-sm hover:bg-white/40 transition-all duration-300 font-semibold shadow-md">
+        ⬆ Back to Top
+      </button>
+    </div>
+
+    <!-- Navigation -->
+    <div>
+      <h4 class="text-xl font-semibold mb-3 text-white">Company</h4>
+      <ul class="space-y-2 text-slate-200/90">
+        <li><a href="#" class="hover:text-white hover:translate-x-1 inline-block transition-all duration-300">About</a></li>
+        <li><a href="#" class="hover:text-white hover:translate-x-1 inline-block transition-all duration-300">Careers</a></li>
+        <li><a href="#" class="hover:text-white hover:translate-x-1 inline-block transition-all duration-300">Contact</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h4 class="text-xl font-semibold mb-3 text-white">Resources</h4>
+      <ul class="space-y-2 text-slate-200/90">
+        <li><a href="#" class="hover:text-white hover:translate-x-1 inline-block transition-all duration-300">Blog</a></li>
+        <li><a href="#" class="hover:text-white hover:translate-x-1 inline-block transition-all duration-300">Help Center</a></li>
+        <li><a href="#" class="hover:text-white hover:translate-x-1 inline-block transition-all duration-300">Privacy Policy</a></li>
+      </ul>
+    </div>
+    </div>
+  </div>
+
+  <!-- Divider -->
+  <div class="relative z-10 max-w-7xl mx-auto mt-10 border-t border-white/20 pt-6 text-center text-slate-200/70">
+    <p>© <span id="year"></span> <span class="font-semibold text-white">ResumeSpark</span> — Built with ❤️ to empower professionals</p>
+  </div>
+</footer>
+
+<!-- Font Awesome for icons -->
+<!-- <script src="https://kit.fontawesome.com/a2e0c5e6dc.js" crossorigin="anonymous"></script> -->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/js/all.min.js"></script>
+
+
+<!-- JS for dynamic year + scroll -->
+<script>
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+</script>
+</main>
+
+  <!-- Mobile CTA sticky -->
+  <div class="mobile-cta md:hidden">
+    <div class="bg-white p-3 rounded-xl shadow-lg flex items-center gap-3 justify-between">
+      <div>
+        <div class="font-semibold text-sm">LLM Resume Review</div>
+        <div class="text-xs text-slate-500">Quick AI-driven suggestions</div>
+      </div>
+      <button class="px-3 py-2 rounded bg-sky-600 text-white text-sm">Try</button>
+    </div>
+  </div>
+  <script>
+  const templates = [
+    { id:'classic',  name:'Classic — Clean', desc:'Simple, readable and ATS-friendly',                   img:'./assets/classic.png',        file:'./templates/template-classic.html' },
+    { id:'modern',   name:'Modern — Stylish', desc:'Modern layout for startups & product roles',        img:'./assets/modern.png',         file:'./templates/template-modern.html' },
+    { id:'tech',     name:'Tech — Engineer',  desc:'Two column layout for engineering impact',          img:'./assets/tech-engineer.png',  file:'./templates/template-tech.html' },
+    { id:'exec',     name:'Executive — Professional', desc:'Leadership-focused with achievements',      img:'./assets/executive.png',      file:'./templates/template-exec.html' },
+    { id:'student',  name:'Student — Freshers', desc:'Academic & projects-first layout',                img:'./assets/student.png',        file:'./templates/template-student.html' },
+    { id:'creative', name:'Creative — Designer', desc:'Colorful and visual-first template',             img:'./assets/creative.png',       file:'./templates/template-creative.html' },
+    { id:'ats',      name:'ATS — Simple', desc:'Plain text-first for ATS parsing',                      img:'./assets/ATS.png',            file:'./templates/template-ats.html' },
+    { id:'designer', name:'Designer — Portfolio', desc:'Showcase projects & visuals',                   img:'./assets/Designer.png',       file:'./templates/template-designer.html' },
+    { id:'ds',       name:'Data Scientist', desc:'Projects + metrics focused',                          img:'./assets/data-scientist.png', file:'./templates/template-ds.html' },
+    { id:'academic', name:'Academic CV', desc:'Publications and teaching focus',                        img:'./assets/Academic.png',       file:'./templates/template-academic.html' }
+  ];
+
+  (function renderTemplates(){
+    const grid = document.querySelector('#templates .grid');
+    if (!grid) return;
+    const tpl = document.getElementById('tpl-card');
+
+    templates.forEach(t => {
+      const clone = tpl.content.cloneNode(true);
+      clone.querySelector('.template-thumb').src = t.img;
+      clone.querySelector('.tpl-name').innerText = t.name;
+      clone.querySelector('.tpl-desc').innerText = t.desc;
+
+      const preview = clone.querySelector('.preview-link');
+      preview.href = t.file;
+      preview.target = '_blank';
+
+      grid.appendChild(clone);
+    });
+  })();
+
+  function toggleFAQ(btn){
+    const expanded = btn.getAttribute('aria-expanded') === 'true';
+    btn.setAttribute('aria-expanded', !expanded);
+    const panel = btn.parentElement.querySelector('div');
+    if (panel) panel.classList.toggle('hidden');
+  }
+// ================= SCROLL BUTTONS =================
+document.getElementById('btn-llm-review')
+  .addEventListener('click', () =>
+    window.scrollTo({ top: document.querySelector('#tools').offsetTop - 40, behavior: 'smooth' })
+  );
+
+document.getElementById('btn-match')
+  .addEventListener('click', () =>
+    window.scrollTo({ top: document.querySelector('#tools').offsetTop - 40, behavior: 'smooth' })
+  );
+
+document.getElementById('btn-roadmap')
+  .addEventListener('click', () =>
+    window.scrollTo({ top: document.querySelector('#tools').offsetTop - 40, behavior: 'smooth' })
+  );
+
+// ================= FOOTER YEAR =================
+document.getElementById('year').innerText = new Date().getFullYear();
+</script>
+</body>
+</html>  

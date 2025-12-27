@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Creative — Designer Resume · ResumeSpark</title>
+      <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+  <style>
+    body { font-family: 'Poppins', sans-serif; }
+    .animated-bg {
+      background: linear-gradient(120deg, #fbc2eb, #a6c1ee, #f6d365, #fda085);
+      background-size: 400% 400%;
+      animation: moveGradient 10s ease infinite;
+    }
+    @keyframes moveGradient {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .gradient-text {
+      background: linear-gradient(to right, #ec4899, #8b5cf6, #3b82f6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    @media print {.no-print{display:none!important;}}
+  </style>
+</head>
+<body class="animated-bg min-h-screen text-gray-800 antialiased">
+
+  <!-- HEADER -->
+  <header class="no-print backdrop-blur-md bg-white/70 sticky top-0 z-50 shadow-md border-b border-white/30">
+    <div class="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500 to-indigo-500 flex items-center justify-center text-white font-semibold shadow-lg">🎨</div>
+        <div>
+          <h1 class="text-xl font-bold gradient-text">ResumeSpark</h1>
+          <p class="text-xs text-slate-600">Creative — Designer Theme</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <button id="downloadPdf" class="bg-gradient-to-r from-pink-600 to-indigo-600 hover:opacity-90 text-white px-4 py-2 rounded-full text-sm font-medium shadow-lg">Download PDF</button>
+        <button id="resetBtn" class="border border-slate-300 px-4 py-2 rounded-full text-sm hover:bg-white/60">Reset</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 py-10 grid gap-8 md:grid-cols-2">
+
+    <!-- LEFT SIDE FORM -->
+    <section class="space-y-6">
+
+      <!-- Personal Info -->
+      <div class="bg-white/80 backdrop-blur-md p-6 rounded-2xl shadow-xl border border-white/40">
+        <h3 class="text-lg font-semibold gradient-text mb-3">Personal Information</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div class="flex flex-col items-center md:items-start">
+            <div class="w-36 h-36 rounded-full overflow-hidden border-4 border-pink-400 shadow-xl">
+              <img id="photoPreview" src="" alt="Photo" class="w-full h-full object-cover" />
+            </div>
+            <input id="photoInput" type="file" accept="image/*" class="mt-3 text-sm" />
+          </div>
+          <div class="col-span-2 space-y-2">
+            <input id="fullName" placeholder="Full Name (e.g., Riya Tyagi)" class="w-full border p-2 rounded" />
+            <input id="headline" placeholder="Creative Designer | UI/UX | Branding" class="w-full border p-2 rounded" />
+            <textarea id="summary" rows="2" placeholder="Your creative philosophy or professional tagline..." class="w-full border p-2 rounded"></textarea>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              <input id="email" placeholder="Email" class="border p-2 rounded" />
+              <input id="phone" placeholder="Phone" class="border p-2 rounded" />
+              <input id="location" placeholder="City, Country" class="border p-2 rounded" />
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              <input id="linkedin" placeholder="LinkedIn" class="border p-2 rounded" />
+              <input id="portfolio" placeholder="Portfolio / Behance" class="border p-2 rounded" />
+              <input id="instagram" placeholder="Instagram / Dribbble" class="border p-2 rounded" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Experience -->
+      <div class="bg-white/80 p-6 rounded-2xl shadow-xl border border-white/40">
+        <div class="flex items-center justify-between">
+          <h3 class="text-lg font-semibold gradient-text">Experience</h3>
+          <button id="addExp" class="text-indigo-600 text-sm">+ Add</button>
+        </div>
+        <div id="expList" class="mt-3 space-y-3">
+          <template id="expTemplate">
+            <div class="exp-item bg-gradient-to-r from-pink-50 to-indigo-50 p-3 rounded-lg border shadow">
+              <input class="exp-role w-full border p-1 rounded mb-1" placeholder="Role (e.g., Graphic Designer)" />
+              <input class="exp-org w-full border p-1 rounded mb-1" placeholder="Company / Studio" />
+              <input class="exp-duration w-full border p-1 rounded mb-1" placeholder="Duration (e.g., 2023–Present)" />
+              <textarea class="exp-desc w-full border p-1 rounded" rows="2" placeholder="Describe creative impact or achievements..."></textarea>
+              <div class="text-right mt-1"><button class="remove-exp text-red-500 text-xs">Remove</button></div>
+            </div>
+          </template>
+        </div>
+      </div>
+
+      <!-- Skills -->
+      <div class="bg-white/80 p-6 rounded-2xl shadow-xl border border-white/40">
+        <div class="flex justify-between items-center">
+          <h3 class="text-lg font-semibold gradient-text">Design Skills</h3>
+          <button id="addSkill" class="text-indigo-600 text-sm">+ Add</button>
+        </div>
+        <div id="skillList" class="mt-3 flex flex-wrap gap-2">
+          <template id="skillTemplate">
+            <div class="skill-item bg-gradient-to-r from-pink-500 to-indigo-500 text-white px-3 py-1 rounded-full flex items-center gap-2">
+              <input class="skill-input bg-transparent border-0 focus:outline-none text-sm text-white placeholder-white" placeholder="Skill (e.g., Figma)" />
+              <button class="remove-skill text-white/80 text-xs">×</button>
+            </div>
+          </template>
+        </div>
+      </div>
+
+      <!-- Projects -->
+      <div class="bg-white/80 p-6 rounded-2xl shadow-xl border border-white/40">
+        <div class="flex items-center justify-between">
+          <h3 class="text-lg font-semibold gradient-text">Creative Projects</h3>
+          <button id="addProj" class="text-indigo-600 text-sm">+ Add</button>
+        </div>
+        <div id="projList" class="mt-3 space-y-3">
+          <template id="projTemplate">
+            <div class="proj-item bg-gradient-to-r from-pink-50 to-blue-50 p-3 rounded-lg border shadow">
+              <input class="proj-title w-full border p-1 rounded mb-1" placeholder="Project Title" />
+              <input class="proj-image w-full border p-1 rounded mb-1" type="file" accept="image/*" />
+              <textarea class="proj-desc w-full border p-1 rounded" rows="2" placeholder="Describe the creative idea and tools used..."></textarea>
+              <input class="proj-link w-full border p-1 rounded mt-1" placeholder="Project Link (Behance / Portfolio)" />
+              <div class="text-right mt-1"><button class="remove-proj text-red-500 text-xs">Remove</button></div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHT SIDE PREVIEW -->
+    <aside>
+      <div id="preview" class="bg-white rounded-2xl shadow-2xl overflow-hidden border-4 border-gradient-to-r from-pink-500 to-indigo-500">
+        <header class="px-6 py-6 bg-gradient-to-r from-pink-500 via-indigo-500 to-blue-500 text-white">
+          <div class="flex items-center gap-4">
+            <div class="w-24 h-24 rounded-full overflow-hidden border-4 border-white">
+              <img id="pvPhoto" src="" alt="" class="w-full h-full object-cover" />
+            </div>
+            <div>
+              <h1 id="pvName" class="text-2xl font-bold">Full Name</h1>
+              <p id="pvHeadline" class="text-sm opacity-90">Creative Designer | UI/UX | Branding</p>
+              <p id="pvSummary" class="text-sm opacity-90 mt-1">Design-driven creator passionate about color, motion, and experience.</p>
+            </div>
+          </div>
+        </header>
+
+        <div class="p-6 text-sm">
+          <div class="flex flex-wrap gap-3 mb-4 text-indigo-600 underline">
+            <a id="pvLinkedin" href="#" target="_blank">LinkedIn</a>
+            <a id="pvPortfolio" href="#" target="_blank">Portfolio</a>
+            <a id="pvInstagram" href="#" target="_blank">Instagram</a>
+          </div>
+
+          <section>
+            <h3 class="text-lg font-semibold gradient-text mb-2">Experience</h3>
+            <ul id="pvExp" class="space-y-2"></ul>
+          </section>
+
+          <hr class="my-4 border-pink-200"/>
+
+          <section>
+            <h3 class="text-lg font-semibold gradient-text mb-2">Design Skills</h3>
+            <div id="pvSkills" class="flex flex-wrap gap-2"></div>
+          </section>
+
+          <hr class="my-4 border-pink-200"/>
+
+          <section>
+            <h3 class="text-lg font-semibold gradient-text mb-2">Creative Projects</h3>
+            <div id="pvProj" class="grid sm:grid-cols-2 gap-3"></div>
+          </section>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <script>
+    const qs=s=>document.querySelector(s),qsa=s=>document.querySelectorAll(s);
+
+    // Basic info update
+    function updatePreview(){
+      qs('#pvName').textContent=qs('#fullName').value||'Full Name';
+      qs('#pvHeadline').textContent=qs('#headline').value||'Creative Designer | UI/UX | Branding';
+      qs('#pvSummary').textContent=qs('#summary').value||'Design-driven creator passionate about color, motion, and experience.';
+      qs('#pvLinkedin').href=qs('#linkedin').value||'#';
+      qs('#pvPortfolio').href=qs('#portfolio').value||'#';
+      qs('#pvInstagram').href=qs('#instagram').value||'#';
+    }
+
+    // Photo
+    const photoInput=qs('#photoInput'),photoPrev=qs('#photoPreview'),pvPhoto=qs('#pvPhoto');
+    photoInput.addEventListener('change',e=>{
+      const f=e.target.files[0];if(!f)return;
+      const r=new FileReader();r.onload=ev=>{photoPrev.src=ev.target.result;pvPhoto.src=ev.target.result;};r.readAsDataURL(f);
+    });
+
+    // Repeater setup
+    function setup(add,list,tmpl,remove,refresh){
+      const btn=qs(add),lst=qs(list),tp=qs(tmpl);
+      btn.addEventListener('click',()=>{lst.appendChild(tp.content.cloneNode(true));refresh();});
+      lst.addEventListener('click',e=>{if(e.target.matches(remove))e.target.closest('div').remove(),refresh();});
+    }
+
+    setup('#addExp','#expList','#expTemplate','.remove-exp',refresh);
+    setup('#addSkill','#skillList','#skillTemplate','.remove-skill',refresh);
+    setup('#addProj','#projList','#projTemplate','.remove-proj',refresh);
+    qs('#addExp').click();qs('#addSkill').click();qs('#addProj').click();
+
+    // Refresh preview
+    function refresh(){
+      const pvExp=qs('#pvExp');pvExp.innerHTML='';
+      qsa('#expList .exp-item').forEach(i=>{
+        const r=i.querySelector('.exp-role').value,o=i.querySelector('.exp-org').value,d=i.querySelector('.exp-duration').value,t=i.querySelector('.exp-desc').value;
+        if(r||o||d||t){
+          const li=document.createElement('li');
+          li.innerHTML=`<div class='font-medium text-pink-600'>${r}</div><div class='text-xs text-slate-600'>${o} · ${d}</div><div class='text-xs text-slate-500'>${t}</div>`;
+          pvExp.appendChild(li);
+        }
+      });
+
+      const pvSkills=qs('#pvSkills');pvSkills.innerHTML='';
+      qsa('#skillList .skill-input').forEach(i=>{
+        if(i.value){const s=document.createElement('span');s.className='px-3 py-1 bg-gradient-to-r from-pink-500 to-indigo-500 text-white rounded-full text-xs';s.textContent=i.value;pvSkills.appendChild(s);}
+      });
+
+      const pvProj=qs('#pvProj');pvProj.innerHTML='';
+      qsa('#projList .proj-item').forEach(i=>{
+        const t=i.querySelector('.proj-title').value,d=i.querySelector('.proj-desc').value,l=i.querySelector('.proj-link').value,imgInput=i.querySelector('.proj-image');
+        let imgSrc='';
+        if(imgInput && imgInput.files && imgInput.files[0]){
+          const reader=new FileReader();
+          reader.onload=ev=>{imgSrc=ev.target.result;};
+          reader.readAsDataURL(imgInput.files[0]);
+        }
+        const card=document.createElement('div');
+        card.className='rounded-xl overflow-hidden border shadow';
+        card.innerHTML=`<div class='bg-gradient-to-r from-pink-400 to-indigo-400 text-white px-2 py-1 font-semibold'>${t||'Project'}</div><div class='p-2 text-xs text-slate-600'>${d}</div>${l?`<a href='${l}' target='_blank' class='text-pink-600 underline text-xs ml-2'>View</a>`:''}`;
+        pvProj.appendChild(card);
+      });
+    }
+
+    document.body.addEventListener('input',()=>{updatePreview();refresh();});
+
+    // PDF
+    qs('#downloadPdf').addEventListener('click',()=>{
+      const opt={margin:0.2,filename:(qs('#fullName').value||'Creative_Designer_Resume')+'.pdf',image:{type:'jpeg',quality:1},html2canvas:{scale:2,useCORS:true},jsPDF:{unit:'in',format:'a4',orientation:'portrait'}};
+      html2pdf().set(opt).from(qs('#preview')).save();
+    });
+
+    // Reset
+    qs('#resetBtn').addEventListener('click',()=>{
+      if(!confirm('Reset all fields?'))return;
+      qsa('input,textarea').forEach(i=>i.value='');
+      qsa('#expList .exp-item,#skillList .skill-item,#projList .proj-item').forEach(n=>n.remove());
+      qs('#addExp').click();qs('#addSkill').click();qs('#addProj').click();
+      updatePreview();refresh();photoPrev.src='';pvPhoto.src='';
+    });
+
+    updatePreview();refresh();
+  </script>
+</body>
+</html>

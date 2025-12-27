@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Student — Freshers Resume · ResumeSpark</title>
+      <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+  <style>
+    [data-cloak]{display:none!important;}
+    @media print{.no-print{display:none!important;}}
+  </style>
+</head>
+<body class="bg-blue-50 text-slate-800 antialiased">
+
+  <!-- Navbar -->
+  <header class="no-print bg-white shadow">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-gradient-to-br from-blue-600 to-sky-400 rounded-lg flex items-center justify-center text-white">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 14l9-5-9-5-9 5 9 5z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 14l6.16-3.422A12.083 12.083 0 0118 20.944 11.96 11.96 0 0112 22a11.96 11.96 0 01-6-1.056 12.083 12.083 0 01-.16-10.366L12 14z" />
+          </svg>
+        </div>
+        <div>
+          <h1 class="font-semibold text-blue-700">ResumeSpark</h1>
+          <p class="text-xs text-slate-500">Student — Freshers · Academic Resume</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <button id="downloadPdf" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm">Download PDF</button>
+        <button id="resetBtn" class="border border-slate-300 px-4 py-2 rounded-md text-sm">Reset</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 py-8 grid gap-8 md:grid-cols-2">
+    <!-- LEFT SIDE -->
+    <section class="space-y-6">
+      <!-- PERSONAL INFO -->
+      <div class="bg-white p-5 rounded-lg shadow-sm">
+        <h3 class="text-lg font-semibold text-blue-700 mb-3">Personal Information</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div class="col-span-1 flex flex-col items-center md:items-start">
+            <div class="w-32 h-32 bg-slate-100 rounded-full overflow-hidden border">
+              <img id="photoPreview" src="" alt="Photo" class="w-full h-full object-cover"/>
+            </div>
+            <label class="mt-2 text-xs text-slate-600">Upload photo</label>
+            <input id="photoInput" type="file" accept="image/*" class="text-xs mt-1" />
+          </div>
+          <div class="col-span-2 space-y-2">
+            <input id="fullName" placeholder="Full Name (e.g., Riya Tyagi)" class="p-2 border rounded w-full" />
+            <input id="headline" placeholder="Course / Stream (e.g., B.Tech CSE Student)" class="p-2 border rounded w-full" />
+            <textarea id="summary" rows="2" placeholder="Short academic objective or career goal..." class="p-2 border rounded w-full"></textarea>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              <input id="email" placeholder="Email" class="p-2 border rounded" />
+              <input id="phone" placeholder="Phone" class="p-2 border rounded" />
+              <input id="location" placeholder="City, Country" class="p-2 border rounded" />
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              <input id="linkedin" placeholder="LinkedIn URL" class="p-2 border rounded" />
+              <input id="portfolio" placeholder="Portfolio / Website" class="p-2 border rounded" />
+              <input id="github" placeholder="GitHub" class="p-2 border rounded" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EDUCATION -->
+      <div class="bg-white p-5 rounded-lg shadow-sm">
+        <div class="flex items-center justify-between">
+          <h3 class="text-lg font-semibold text-blue-700">Education</h3>
+          <button id="addEdu" class="text-blue-700 text-sm">+ Add</button>
+        </div>
+        <div id="eduList" class="mt-3 space-y-3">
+          <template id="eduTemplate">
+            <div class="bg-slate-50 p-3 rounded border">
+              <input class="edu-inst w-full p-1 border rounded mb-1" placeholder="Institution" />
+              <input class="edu-degree w-full p-1 border rounded mb-1" placeholder="Degree / Course" />
+              <input class="edu-year w-full p-1 border rounded" placeholder="Year (e.g., 2021–2025)" />
+              <div class="text-right mt-2"><button class="remove-edu text-red-500 text-xs">Remove</button></div>
+            </div>
+          </template>
+        </div>
+      </div>
+
+      <!-- PROJECTS -->
+      <div class="bg-white p-5 rounded-lg shadow-sm">
+        <div class="flex items-center justify-between">
+          <h3 class="text-lg font-semibold text-blue-700">Projects</h3>
+          <button id="addProj" class="text-blue-700 text-sm">+ Add</button>
+        </div>
+        <div id="projList" class="mt-3 space-y-3">
+          <template id="projTemplate">
+            <div class="bg-slate-50 p-3 rounded border">
+              <input class="proj-title w-full p-1 border rounded mb-1" placeholder="Project Title" />
+              <textarea class="proj-desc w-full p-1 border rounded" rows="2" placeholder="Short description of project..."></textarea>
+              <input class="proj-link w-full p-1 border rounded mt-1" placeholder="Project Link (optional)" />
+              <div class="text-right mt-2"><button class="remove-proj text-red-500 text-xs">Remove</button></div>
+            </div>
+          </template>
+        </div>
+      </div>
+
+      <!-- SKILLS -->
+      <div class="bg-white p-5 rounded-lg shadow-sm">
+        <div class="flex items-center justify-between">
+          <h3 class="text-lg font-semibold text-blue-700">Skills</h3>
+          <button id="addSkill" class="text-blue-700 text-sm">+ Add</button>
+        </div>
+        <div id="skillList" class="mt-3 flex flex-wrap gap-2">
+          <template id="skillTemplate">
+            <div class="bg-blue-50 border border-blue-400 px-3 py-1 rounded-full flex items-center gap-2">
+              <input class="skill-input bg-transparent border-0 focus:outline-none text-sm text-blue-700" placeholder="Skill (e.g., React.js)" />
+              <button class="remove-skill text-red-500 text-xs">×</button>
+            </div>
+          </template>
+        </div>
+      </div>
+
+      <!-- ACHIEVEMENTS -->
+      <div class="bg-white p-5 rounded-lg shadow-sm">
+        <div class="flex items-center justify-between">
+          <h3 class="text-lg font-semibold text-blue-700">Achievements & Certifications</h3>
+          <button id="addAch" class="text-blue-700 text-sm">+ Add</button>
+        </div>
+        <div id="achList" class="mt-3 space-y-2">
+          <template id="achTemplate">
+            <div class="border bg-slate-50 p-3 rounded flex justify-between">
+              <input class="ach-input w-full p-1 border rounded" placeholder="Achievement or Certificate title" />
+              <button class="remove-ach text-red-500 text-sm ml-2">×</button>
+            </div>
+          </template>
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHT PREVIEW -->
+    <aside>
+      <div id="preview" class="bg-white rounded-lg shadow overflow-hidden">
+        <header class="px-6 py-6 bg-gradient-to-r from-blue-700 to-sky-500 text-white">
+          <div class="flex items-center gap-4">
+            <div class="w-24 h-24 rounded-full overflow-hidden border-4 border-white bg-slate-200 flex-shrink-0">
+              <img id="pvPhoto" src="" alt="" class="w-full h-full object-cover"/>
+            </div>
+            <div>
+              <h1 id="pvName" class="text-2xl font-bold">Full Name</h1>
+              <p id="pvHeadline" class="text-sm opacity-90">Course / Stream</p>
+              <p id="pvSummary" class="text-sm opacity-80 mt-2">Short academic goal or intro.</p>
+            </div>
+          </div>
+          <div class="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs opacity-90">
+            <div id="pvEmail">email@example.com</div>
+            <div id="pvPhone">+91 12345 67890</div>
+            <div id="pvLocation">City, Country</div>
+          </div>
+        </header>
+
+        <div class="p-6 text-sm">
+          <div class="flex gap-3 text-blue-600 underline mb-4">
+            <a id="pvLinkedin" href="#" target="_blank">LinkedIn</a>
+            <a id="pvPortfolio" href="#" target="_blank">Portfolio</a>
+            <a id="pvGithub" href="#" target="_blank">GitHub</a>
+          </div>
+
+          <section>
+            <h3 class="text-lg font-semibold text-blue-700 mb-2">Education</h3>
+            <ul id="pvEdu" class="space-y-2"></ul>
+          </section>
+
+          <hr class="my-4"/>
+
+          <section>
+            <h3 class="text-lg font-semibold text-blue-700 mb-2">Projects</h3>
+            <ul id="pvProj" class="space-y-2"></ul>
+          </section>
+
+          <hr class="my-4"/>
+
+          <section>
+            <h3 class="text-lg font-semibold text-blue-700 mb-2">Skills</h3>
+            <div id="pvSkills" class="flex flex-wrap gap-2"></div>
+          </section>
+
+          <hr class="my-4"/>
+
+          <section>
+            <h3 class="text-lg font-semibold text-blue-700 mb-2">Achievements & Certifications</h3>
+            <ul id="pvAch" class="space-y-1"></ul>
+          </section>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <script>
+    const qs=s=>document.querySelector(s),qsa=s=>document.querySelectorAll(s);
+
+    function bindInputs(){
+      ['#fullName','#headline','#summary','#email','#phone','#location','#linkedin','#portfolio','#github']
+      .map(q=>qs(q)).forEach(el=>el.addEventListener('input',updatePreview));
+    }
+
+    function updatePreview(){
+      qs('#pvName').textContent=qs('#fullName').value||'Full Name';
+      qs('#pvHeadline').textContent=qs('#headline').value||'Course / Stream';
+      qs('#pvSummary').textContent=qs('#summary').value||'Short academic goal or intro.';
+      qs('#pvEmail').textContent=qs('#email').value||'email@example.com';
+      qs('#pvPhone').textContent=qs('#phone').value||'+91 12345 67890';
+      qs('#pvLocation').textContent=qs('#location').value||'City, Country';
+      qs('#pvLinkedin').href=qs('#linkedin').value||'#';
+      qs('#pvPortfolio').href=qs('#portfolio').value||'#';
+      qs('#pvGithub').href=qs('#github').value||'#';
+    }
+
+    const photoInput=qs('#photoInput'),photoPrev=qs('#photoPreview'),pvPhoto=qs('#pvPhoto');
+    photoInput.addEventListener('change',e=>{
+      const f=e.target.files[0];if(!f)return;
+      const r=new FileReader();
+      r.onload=ev=>{
+        photoPrev.src=ev.target.result;
+        pvPhoto.src=ev.target.result;
+      };
+      r.readAsDataURL(f);
+    });
+
+    function setup(addBtn,list,template,remove,cb){
+      qs(addBtn).addEventListener('click',()=>{
+        const node=qs(template).content.cloneNode(true);
+        qs(list).appendChild(node);
+        cb&&cb();
+      });
+      qs(list).addEventListener('click',e=>{
+        if(e.target.matches(remove)){e.target.closest('div').remove();refresh();}
+      });
+    }
+
+    setup('#addEdu','#eduList','#eduTemplate','.remove-edu',refresh);
+    setup('#addProj','#projList','#projTemplate','.remove-proj',refresh);
+    setup('#addSkill','#skillList','#skillTemplate','.remove-skill',refresh);
+    setup('#addAch','#achList','#achTemplate','.remove-ach',refresh);
+    qs('#addEdu').click();qs('#addProj').click();qs('#addSkill').click();qs('#addAch').click();
+
+    function refresh(){
+      const pvEdu=qs('#pvEdu');pvEdu.innerHTML='';
+      qsa('#eduList .bg-slate-50').forEach(n=>{
+        const i=n.querySelector('.edu-inst').value,d=n.querySelector('.edu-degree').value,y=n.querySelector('.edu-year').value;
+        if(i||d||y){const li=document.createElement('li');
+          li.innerHTML=`<div class='font-medium text-blue-700'>${i}</div><div class='text-xs text-slate-600'>${d} · ${y}</div>`;
+          pvEdu.appendChild(li);
+        }
+      });
+      const pvProj=qs('#pvProj');pvProj.innerHTML='';
+      qsa('#projList .bg-slate-50').forEach(n=>{
+        const t=n.querySelector('.proj-title').value,d=n.querySelector('.proj-desc').value,l=n.querySelector('.proj-link').value;
+        if(t||d){const li=document.createElement('li');
+          li.innerHTML=`<div class='font-medium text-blue-700'>${t}${l?` <a href='${l}' class='text-blue-500 underline text-xs ml-1' target='_blank'>[link]</a>`:''}</div><div class='text-xs text-slate-600'>${d}</div>`;
+          pvProj.appendChild(li);
+        }
+      });
+      const pvSkills=qs('#pvSkills');pvSkills.innerHTML='';
+      qsa('#skillList .skill-input').forEach(i=>{
+        if(i.value){const span=document.createElement('span');
+          span.className='px-2 py-1 border border-blue-600 text-blue-700 rounded-full text-xs';
+          span.textContent=i.value;
+          pvSkills.appendChild(span);
+        }
+      });
+      const pvAch=qs('#pvAch');pvAch.innerHTML='';
+      qsa('#achList .ach-input').forEach(i=>{
+        if(i.value){const li=document.createElement('li');li.textContent=i.value;pvAch.appendChild(li);}
+      });
+    }
+
+    document.body.addEventListener('input',e=>{
+      if(e.target.matches('.edu-inst,.edu-degree,.edu-year,.proj-title,.proj-desc,.proj-link,.skill-input,.ach-input'))refresh();
+    });
+
+    qs('#downloadPdf').addEventListener('click',()=>{
+      const opt={margin:0.2,filename:(qs('#fullName').value||'Student_Resume')+'.pdf',image:{type:'jpeg',quality:0.98},html2canvas:{scale:2,useCORS:true},jsPDF:{unit:'in',format:'a4',orientation:'portrait'}};
+      html2pdf().set(opt).from(qs('#preview')).save();
+    });
+
+    qs('#resetBtn').addEventListener('click',()=>{
+      if(!confirm('Reset all fields?'))return;
+      qsa('input,textarea').forEach(i=>i.value='');
+      qsa('#eduList .bg-slate-50,#projList .bg-slate-50,#skillList .bg-blue-50,#achList .border').forEach(n=>n.remove());
+      qs('#addEdu').click();qs('#addProj').click();qs('#addSkill').click();qs('#addAch').click();
+      updatePreview();refresh();photoPrev.src='';pvPhoto.src='';
+    });
+
+    bindInputs();updatePreview();refresh();
+  </script>
+</body>
+</html>

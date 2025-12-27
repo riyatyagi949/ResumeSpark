@@ -1,0 +1,133 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Classic Student Resume - ResumeSpark</title>
+      <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+  <script src="https://kit.fontawesome.com/a2e0f1f5d2.js" crossorigin="anonymous"></script>
+
+  <style>
+    body {
+      font-family: Inter, system-ui;
+      background-color: #f9fafb;
+    }
+    input, textarea {
+      border: 1px solid #d1d5db;
+      padding: 6px;
+      border-radius: 6px;
+      width: 100%;
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 1px #2563eb;
+    }
+  </style>
+</head>
+
+<body class="p-6">
+  <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-8">
+    <!-- LEFT: Input Form -->
+    <div class="bg-white p-6 rounded-xl shadow">
+      <h1 class="text-xl font-semibold mb-4 flex items-center gap-2">
+        <i class="fa-solid fa-file-lines text-blue-600"></i> ResumeSpark Editor
+      </h1>
+
+      <label class="text-sm font-medium">Full Name</label>
+      <input type="text" id="name" placeholder="Enter your name">
+
+      <label class="text-sm font-medium">Email</label>
+      <input type="text" id="email" placeholder="you@example.com">
+
+      <label class="text-sm font-medium">Phone</label>
+      <input type="text" id="phone" placeholder="+91 99999 99999">
+
+      <label class="text-sm font-medium">Location</label>
+      <input type="text" id="location" placeholder="City, Country">
+
+      <label class="text-sm font-medium">Summary</label>
+      <textarea id="summary" rows="3" placeholder="Write a short summary about yourself"></textarea>
+
+      <label class="text-sm font-medium">Experience</label>
+      <textarea id="experience" rows="4" placeholder="Describe your experience (role, company, achievements)"></textarea>
+
+      <label class="text-sm font-medium">Education</label>
+      <textarea id="education" rows="2" placeholder="Your degree, college, and year"></textarea>
+
+      <label class="text-sm font-medium">Skills</label>
+      <input type="text" id="skills" placeholder="e.g., HTML, CSS, JavaScript, React, Git">
+    </div>
+
+    <!-- RIGHT: Resume Preview -->
+    <div class="bg-white p-8 border rounded-xl shadow overflow-auto">
+      <header class="mb-4 border-b pb-2">
+        <h1 class="text-3xl font-bold" id="display-name">Your Name</h1>
+        <p class="text-sm text-gray-600" id="display-contact">
+          you@example.com • +91 99999 99999 • City, Country
+        </p>
+      </header>
+
+      <section class="mb-4">
+        <h2 class="text-lg font-semibold border-b mb-1 pb-1">Summary</h2>
+        <p class="text-sm text-gray-700" id="display-summary">
+          A concise summary describing your background and goals.
+        </p>
+      </section>
+
+      <section class="mb-4">
+        <h2 class="text-lg font-semibold border-b mb-1 pb-1">Experience</h2>
+        <p class="text-sm text-gray-700 whitespace-pre-line" id="display-experience">
+          Role — Company (Jan 2023 - Present)
+          • Achievement or responsibility one.
+          • Achievement or responsibility two.
+        </p>
+      </section>
+
+      <section class="mb-4">
+        <h2 class="text-lg font-semibold border-b mb-1 pb-1">Education</h2>
+        <p class="text-sm text-gray-700" id="display-education">
+          B.Tech — University • Year
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-semibold border-b mb-1 pb-1">Skills</h2>
+        <p class="text-sm text-gray-700" id="display-skills">
+          HTML • CSS • JavaScript • React • Git
+        </p>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const bindInput = (inputId, outputId, formatter = (val) => val) => {
+      document.getElementById(inputId).addEventListener('input', (e) => {
+        document.getElementById(outputId).textContent = formatter(e.target.value || document.getElementById(inputId).placeholder);
+      });
+    };
+
+    bindInput('name', 'display-name');
+    bindInput('email', 'display-contact', (val) => `${val || 'you@example.com'} • ${document.getElementById('phone').value || '+91 99999 99999'} • ${document.getElementById('location').value || 'City, Country'}`);
+    bindInput('phone', 'display-contact', () => {
+      const email = document.getElementById('email').value || 'you@example.com';
+      const phone = document.getElementById('phone').value || '+91 99999 99999';
+      const loc = document.getElementById('location').value || 'City, Country';
+      return `${email} • ${phone} • ${loc}`;
+    });
+    bindInput('location', 'display-contact', () => {
+      const email = document.getElementById('email').value || 'you@example.com';
+      const phone = document.getElementById('phone').value || '+91 99999 99999';
+      const loc = document.getElementById('location').value || 'City, Country';
+      return `${email} • ${phone} • ${loc}`;
+    });
+
+    bindInput('summary', 'display-summary');
+    bindInput('experience', 'display-experience');
+    bindInput('education', 'display-education');
+    bindInput('skills', 'display-skills');
+  </script>
+</body>
+</html>

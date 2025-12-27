@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Academic Resume - ResumeSpark</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+  </head>
+
+  <body class="bg-gray-100 font-sans text-gray-800">
+    <!-- Navbar -->
+    <nav class="bg-white shadow">
+      <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+        <a href="#" class="flex items-center space-x-2 text-2xl font-bold text-blue-600">
+          <img src="https://cdn-icons-png.flaticon.com/512/3135/3135755.png" alt="resume icon" class="w-9 h-9" />
+          <span>Resume<span class="text-gray-800">Spark</span></span>
+        </a>
+        <button onclick="downloadPDF()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+          Download PDF
+        </button>
+      </div>
+    </nav>
+
+    <!-- Form Section -->
+    <section class="container mx-auto px-4 py-10 grid md:grid-cols-2 gap-10">
+      <form id="academicForm" class="space-y-8 overflow-y-auto max-h-[80vh] p-4 bg-white shadow rounded-xl">
+        <!-- Personal Information -->
+        <div>
+          <h2 class="text-xl font-semibold mb-4 border-b pb-2">Personal Information</h2>
+          <div class="grid md:grid-cols-2 gap-4">
+            <input type="text" id="fullname" placeholder="Full Name" class="border p-2 rounded w-full" oninput="updatePreview()" />
+            <input type="text" id="designation" placeholder="Designation" class="border p-2 rounded w-full" oninput="updatePreview()" />
+            <input type="text" id="email" placeholder="Email" class="border p-2 rounded w-full" oninput="updatePreview()" />
+            <input type="text" id="phone" placeholder="Phone Number" class="border p-2 rounded w-full" oninput="updatePreview()" />
+            <input type="text" id="address" placeholder="Address" class="border p-2 rounded w-full" oninput="updatePreview()" />
+            <input type="file" id="photo" accept="image/*" class="border p-2 rounded w-full" onchange="previewImage()" />
+          </div>
+        </div>
+
+        <!-- Education -->
+        <div>
+          <h2 class="text-xl font-semibold mb-4 border-b pb-2">Education</h2>
+          <div id="educationList" class="space-y-3">
+            <div class="grid md:grid-cols-3 gap-3">
+              <input type="text" placeholder="Institution" class="border p-2 rounded edu_school" oninput="updatePreview()" />
+              <input type="text" placeholder="Degree" class="border p-2 rounded edu_degree" oninput="updatePreview()" />
+              <input type="text" placeholder="Duration" class="border p-2 rounded edu_duration" oninput="updatePreview()" />
+            </div>
+          </div>
+          <button type="button" onclick="addEducation()" class="mt-2 text-blue-600 font-medium">+ Add Education</button>
+        </div>
+
+        <!-- Research -->
+        <div>
+          <h2 class="text-xl font-semibold mb-4 border-b pb-2">Research Experience</h2>
+          <div id="researchList" class="space-y-3">
+            <div class="grid md:grid-cols-3 gap-3">
+              <input type="text" placeholder="Title" class="border p-2 rounded research_title" oninput="updatePreview()" />
+              <input type="text" placeholder="Organization" class="border p-2 rounded research_org" oninput="updatePreview()" />
+              <input type="text" placeholder="Duration" class="border p-2 rounded research_duration" oninput="updatePreview()" />
+            </div>
+          </div>
+          <button type="button" onclick="addResearch()" class="mt-2 text-blue-600 font-medium">+ Add Research</button>
+        </div>
+
+        <!-- Publications -->
+        <div>
+          <h2 class="text-xl font-semibold mb-4 border-b pb-2">Publications</h2>
+          <div id="publicationList" class="space-y-2">
+            <input type="text" placeholder="Publication Title" class="border p-2 rounded publication_title" oninput="updatePreview()" />
+          </div>
+          <button type="button" onclick="addPublication()" class="mt-2 text-blue-600 font-medium">+ Add Publication</button>
+        </div>
+
+        <!-- Projects -->
+        <div>
+          <h2 class="text-xl font-semibold mb-4 border-b pb-2">Projects</h2>
+          <div id="projectList" class="space-y-2">
+            <div class="grid md:grid-cols-2 gap-3">
+              <input type="text" placeholder="Project Title" class="border p-2 rounded project_title" oninput="updatePreview()" />
+              <input type="text" placeholder="Description" class="border p-2 rounded project_description" oninput="updatePreview()" />
+            </div>
+          </div>
+          <button type="button" onclick="addProject()" class="mt-2 text-blue-600 font-medium">+ Add Project</button>
+        </div>
+
+        <!-- Skills -->
+        <div>
+          <h2 class="text-xl font-semibold mb-4 border-b pb-2">Skills</h2>
+          <div id="skillList" class="space-y-2">
+            <input type="text" placeholder="Skill" class="border p-2 rounded skill" oninput="updatePreview()" />
+          </div>
+          <button type="button" onclick="addSkill()" class="mt-2 text-blue-600 font-medium">+ Add Skill</button>
+        </div>
+
+        <!-- Achievements -->
+        <div>
+          <h2 class="text-xl font-semibold mb-4 border-b pb-2">Achievements</h2>
+          <div id="achievementList" class="space-y-2">
+            <input type="text" placeholder="Achievement" class="border p-2 rounded achievement" oninput="updatePreview()" />
+          </div>
+          <button type="button" onclick="addAchievement()" class="mt-2 text-blue-600 font-medium">+ Add Achievement</button>
+        </div>
+
+        <!-- References -->
+        <div>
+          <h2 class="text-xl font-semibold mb-4 border-b pb-2">References</h2>
+          <div id="referenceList" class="space-y-2">
+            <div class="grid md:grid-cols-2 gap-3">
+              <input type="text" placeholder="Name" class="border p-2 rounded reference_name" oninput="updatePreview()" />
+              <input type="text" placeholder="Contact Info" class="border p-2 rounded reference_contact" oninput="updatePreview()" />
+            </div>
+          </div>
+          <button type="button" onclick="addReference()" class="mt-2 text-blue-600 font-medium">+ Add Reference</button>
+        </div>
+      </form>
+
+      <!-- Resume Preview -->
+      <section id="resumePreview" class="bg-white shadow rounded-xl p-8 overflow-y-auto max-h-[80vh]">
+        <div class="flex flex-col md:flex-row gap-6">
+          <div class="w-full md:w-1/3 bg-blue-50 p-4 rounded-lg text-center">
+            <img id="photoPreview" src="" alt="Profile Photo" class="w-40 h-40 rounded-full mx-auto mb-4 object-cover border" />
+            <h2 id="nameDisplay" class="text-xl font-bold"></h2>
+            <p id="designationDisplay" class="text-gray-600"></p>
+            <p id="emailDisplay"></p>
+            <p id="phoneDisplay"></p>
+            <p id="addressDisplay"></p>
+
+            <h3 class="mt-6 font-semibold text-blue-600">Skills</h3>
+            <ul id="skillsDisplay" class="list-disc text-left pl-5"></ul>
+          </div>
+
+          <div class="flex-1 space-y-6">
+            <div>
+              <h3 class="text-lg font-semibold text-blue-600 border-b pb-1">Education</h3>
+              <ul id="educationDisplay" class="mt-2 space-y-1"></ul>
+            </div>
+            <div>
+              <h3 class="text-lg font-semibold text-blue-600 border-b pb-1">Research</h3>
+              <ul id="researchDisplay" class="mt-2 space-y-1"></ul>
+            </div>
+            <div>
+              <h3 class="text-lg font-semibold text-blue-600 border-b pb-1">Publications</h3>
+              <ul id="publicationDisplay" class="mt-2 space-y-1"></ul>
+            </div>
+            <div>
+              <h3 class="text-lg font-semibold text-blue-600 border-b pb-1">Projects</h3>
+              <ul id="projectDisplay" class="mt-2 space-y-1"></ul>
+            </div>
+            <div>
+              <h3 class="text-lg font-semibold text-blue-600 border-b pb-1">Achievements</h3>
+              <ul id="achievementDisplay" class="mt-2 space-y-1"></ul>
+            </div>
+            <div>
+              <h3 class="text-lg font-semibold text-blue-600 border-b pb-1">References</h3>
+              <ul id="referenceDisplay" class="mt-2 space-y-1"></ul>
+            </div>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <script>
+      function previewImage() {
+        const file = document.getElementById("photo").files[0];
+        const reader = new FileReader();
+        reader.onload = e => (document.getElementById("photoPreview").src = e.target.result);
+        reader.readAsDataURL(file);
+      }
+
+      function updatePreview() {
+        document.getElementById("nameDisplay").textContent = document.getElementById("fullname").value;
+        document.getElementById("designationDisplay").textContent = document.getElementById("designation").value;
+        document.getElementById("emailDisplay").textContent = document.getElementById("email").value;
+        document.getElementById("phoneDisplay").textContent = document.getElementById("phone").value;
+        document.getElementById("addressDisplay").textContent = document.getElementById("address").value;
+
+        // Education
+        const eduList = Array.from(document.querySelectorAll("#educationList .grid"));
+        document.getElementById("educationDisplay").innerHTML = eduList
+          .map(e => {
+            const s = e.querySelector(".edu_school").value;
+            const d = e.querySelector(".edu_degree").value;
+            const t = e.querySelector(".edu_duration").value;
+            return `<li>${s} - ${d} (${t})</li>`;
+          })
+          .join("");
+
+        // Research
+        const resList = Array.from(document.querySelectorAll("#researchList .grid"));
+        document.getElementById("researchDisplay").innerHTML = resList
+          .map(e => {
+            const t = e.querySelector(".research_title").value;
+            const o = e.querySelector(".research_org").value;
+            const du = e.querySelector(".research_duration").value;
+            return `<li>${t} - ${o} (${du})</li>`;
+          })
+          .join("");
+
+        // Publications
+        const pubs = Array.from(document.querySelectorAll(".publication_title")).map(e => `<li>${e.value}</li>`).join("");
+        document.getElementById("publicationDisplay").innerHTML = pubs;
+
+        // Projects
+        const projs = Array.from(document.querySelectorAll("#projectList .grid")).map(e => {
+          const t = e.querySelector(".project_title").value;
+          const d = e.querySelector(".project_description").value;
+          return `<li><strong>${t}:</strong> ${d}</li>`;
+        }).join("");
+        document.getElementById("projectDisplay").innerHTML = projs;
+
+        // Skills
+        const skills = Array.from(document.querySelectorAll(".skill")).map(e => `<li>${e.value}</li>`).join("");
+        document.getElementById("skillsDisplay").innerHTML = skills;
+
+        // Achievements
+        const ach = Array.from(document.querySelectorAll(".achievement")).map(e => `<li>${e.value}</li>`).join("");
+        document.getElementById("achievementDisplay").innerHTML = ach;
+
+        // References
+        const refs = Array.from(document.querySelectorAll("#referenceList .grid")).map(e => {
+          const n = e.querySelector(".reference_name").value;
+          const c = e.querySelector(".reference_contact").value;
+          return `<li>${n} - ${c}</li>`;
+        }).join("");
+        document.getElementById("referenceDisplay").innerHTML = refs;
+      }
+
+      function addEducation() {
+        const div = document.createElement("div");
+        div.className = "grid md:grid-cols-3 gap-3";
+        div.innerHTML = `<input type="text" placeholder="Institution" class="border p-2 rounded edu_school" oninput="updatePreview()"/>
+        <input type="text" placeholder="Degree" class="border p-2 rounded edu_degree" oninput="updatePreview()"/>
+        <input type="text" placeholder="Duration" class="border p-2 rounded edu_duration" oninput="updatePreview()"/>`;
+        document.getElementById("educationList").appendChild(div);
+      }
+
+      function addResearch() {
+        const div = document.createElement("div");
+        div.className = "grid md:grid-cols-3 gap-3";
+        div.innerHTML = `<input type="text" placeholder="Title" class="border p-2 rounded research_title" oninput="updatePreview()"/>
+        <input type="text" placeholder="Organization" class="border p-2 rounded research_org" oninput="updatePreview()"/>
+        <input type="text" placeholder="Duration" class="border p-2 rounded research_duration" oninput="updatePreview()"/>`;
+        document.getElementById("researchList").appendChild(div);
+      }
+
+      function addPublication() {
+        const input = document.createElement("input");
+        input.type = "text";
+        input.placeholder = "Publication Title";
+        input.className = "border p-2 rounded publication_title";
+        input.oninput = updatePreview;
+        document.getElementById("publicationList").appendChild(input);
+      }
+
+      function addProject() {
+        const div = document.createElement("div");
+        div.className = "grid md:grid-cols-2 gap-3";
+        div.innerHTML = `<input type="text" placeholder="Project Title" class="border p-2 rounded project_title" oninput="updatePreview()"/>
+        <input type="text" placeholder="Description" class="border p-2 rounded project_description" oninput="updatePreview()"/>`;
+        document.getElementById("projectList").appendChild(div);
+      }
+
+      function addSkill() {
+        const input = document.createElement("input");
+        input.type = "text";
+        input.placeholder = "Skill";
+        input.className = "border p-2 rounded skill";
+        input.oninput = updatePreview;
+        document.getElementById("skillList").appendChild(input);
+      }
+
+      function addAchievement() {
+        const input = document.createElement("input");
+        input.type = "text";
+        input.placeholder = "Achievement";
+        input.className = "border p-2 rounded achievement";
+        input.oninput = updatePreview;
+        document.getElementById("achievementList").appendChild(input);
+      }
+
+      function addReference() {
+        const div = document.createElement("div");
+        div.className = "grid md:grid-cols-2 gap-3";
+        div.innerHTML = `<input type="text" placeholder="Name" class="border p-2 rounded reference_name" oninput="updatePreview()"/>
+        <input type="text" placeholder="Contact Info" class="border p-2 rounded reference_contact" oninput="updatePreview()"/>`;
+        document.getElementById("referenceList").appendChild(div);
+      }
+
+      function downloadPDF() {
+        const element = document.getElementById("resumePreview");
+        html2pdf().from(element).save("Academic_Resume.pdf");
+      }
+    </script>
+  </body>
+</html>
