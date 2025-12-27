@@ -1,112 +1,153 @@
-Yeh README tumhare current project structure (frontend + backend + LLM tools) ke hisaab se likha gaya hai; seedha `README.md` me paste kar sakti ho aur baad me badges/additional links add kar lena.
+# ResumeSpark 🚀  
+### AI-Powered Resume Builder & Career Roadmap Platform
 
-```markdown
-# ResumeSpark 🚀 – AI‑Powered Resume Builder
+ResumeSpark is a modern, **ATS-friendly resume builder** that combines clean, professional templates with **LLM-powered guidance** to help users create interview-ready resumes and structured career preparation plans.
 
-ResumeSpark is a modern, ATS‑friendly resume builder that combines clean templates with **LLM‑powered** guidance to help you create interview‑ready resumes and focused prep plans.
-
----
-
-## ✨ Features
-
-- **LLM Resume Review**  
-  Paste your resume text and get AI feedback with bullet‑point suggestions on clarity, impact, and missing details.
-
-- **Resume ↔ Job Description Match**  
-  Paste a JD and see:
-  - Match percentage  
-  - Missing keywords/skills  
-  - Suggested edits to better align your resume
-
-- **Dream‑Role Roadmap**  
-  Type a role (e.g. `SDE intern at Meta`, `Senior SDE Salesforce`) and get:
-  - 3‑month learning roadmap  
-  - Skills, projects, and resources  
-  - Quick one‑click “3‑Month Plan” version
-
-- **Template Gallery**  
-  - Multiple resume templates (Classic, Modern, Tech, Executive, Student, etc.)  
-  - One‑click **Preview** in a new tab  
-  - Tailwind‑based responsive UI
-
-- **Developer‑Friendly Stack**  
-  - Frontend: HTML, CSS, Tailwind CSS, vanilla JS  
-  - Backend: Node.js, Express  
-  - AI: OpenAI Chat Completions API (`gpt-4o-mini` currently) [web:97]
+It goes beyond resume building by offering **resume analysis**, **job description matching**, and **dream-role learning roadmaps** — all in one lightweight web app.
 
 ---
 
-## 📂 Project Structure
+## ✨ Key Features
+
+### 🔍 LLM Resume Review
+- Paste your resume text and receive **AI-generated feedback**
+- Bullet-point suggestions on:
+  - Clarity & structure  
+  - Impact & wording  
+  - Missing skills or details  
+- Output shown in a clean, scrollable UI card
+
+---
+
+### 📊 Resume ↔ Job Description Match
+- Compare your resume against a target Job Description
+- Get:
+  - **Match percentage**
+  - Missing keywords & skills
+  - Actionable resume improvement suggestions
+- Includes a **“Use Example JD”** button for quick testing
+
+---
+
+### 🎯 Dream-Role Roadmap Generator
+- Enter any role (e.g. `SDE Intern at Meta`, `Senior Salesforce Developer`)
+- Instantly receive:
+  - 3-month structured learning roadmap
+  - Required skills & recommended projects
+  - Resources & preparation strategy
+- One-click **Quick 3-Month Plan** for a condensed version
+
+---
+
+### 🧾 Resume Template Gallery
+- Multiple ATS-friendly resume templates:
+  - Classic  
+  - Modern  
+  - Tech  
+  - Executive  
+  - Student  
+- One-click **Preview** opens template in a new tab
+- Fully responsive **Tailwind CSS** design
+
+---
+
+## 🧑‍💻 Tech Stack
+
+### Frontend
+- HTML  
+- CSS  
+- Tailwind CSS  
+- Vanilla JavaScript  
+
+### Backend
+- Node.js  
+- Express.js  
+
+### AI Integration
+- OpenAI Chat Completions API  
+- Model: `gpt-4o-mini`  
+
+---
+
+## 📁 Project Structure
 
 ```
+
 resumespark/
 ├── frontend/
-│   ├── index.html          # Landing page + tools (LLM Review, Match, Roadmap)
-│   ├── templates/          # Individual resume templates
-│   ├── assets/             # Images, icons, preview assets
+│   ├── index.html          # Landing page + AI tools
+│   ├── templates/          # Resume templates
+│   ├── assets/             # Images, icons
 │   └── js/
-│       └── app.js          # Frontend logic for AI tools
+│       └── app.js          # Frontend logic & API calls
 │
 ├── backend/
-│   ├── server.js           # Express server entrypoint
+│   ├── server.js           # Express server entry point
 │   ├── routes/
-│   │   ├── llm.js          # LLM Resume Review route
-│   │   ├── match.js        # Resume ↔ JD match route
-│   │   └── roadmap.js      # Dream‑role roadmap route
+│   │   ├── llm.js          # Resume review API
+│   │   ├── match.js        # Resume ↔ JD match API
+│   │   └── roadmap.js     # Dream-role roadmap API
 │   └── package.json
 │
 ├── .gitignore
 └── README.md
-```
-[file:68]
+
+````
 
 ---
 
 ## 🛠️ Setup & Installation
 
-### 1. Clone the repository
-
-```
+### 1️⃣ Clone the Repository
+```bash
 git clone https://github.com/riyatyagi949/ResumeSpark.git
 cd ResumeSpark
-```
+````
 
-### 2. Backend setup
+---
 
-```
+### 2️⃣ Backend Setup
+
+```bash
 cd backend
 npm install
 ```
 
-Create a `.env` file in `backend/`:
+Create a `.env` file inside the `backend/` folder:
 
-```
+```env
 OPENAI_API_KEY=sk-your-key-here
 PORT=5001
 ```
 
-> `.env` is already in `.gitignore` so your key won’t be committed. [web:86]
+> 🔒 `.env` is already added to `.gitignore` to keep your API key secure.
 
-Start backend:
+Start the backend server:
 
-```
+```bash
 npm start
 # or
 node server.js
 ```
 
-Backend will run on:  
-`http://localhost:5001`
-
-### 3. Frontend setup
-
-Frontend is plain HTML/JS. Simplest way is to use VS Code Live Server or any static server.
-
-From project root:
+Backend runs on:
 
 ```
+http://localhost:5001
+```
+
+---
+
+### 3️⃣ Frontend Setup
+
+The frontend is built using plain HTML & JavaScript.
+
+You can use **VS Code Live Server** or any static server.
+
+Example using `serve`:
+
+```bash
 cd frontend
-# Example using npx serve
 npx serve .
 ```
 
@@ -116,92 +157,90 @@ Open in browser:
 http://127.0.0.1:5500/resumespark/frontend/index.html
 ```
 
-(Use whatever URL your static server shows.)
-
 ---
 
 ## 🚀 How to Use
 
-### LLM Resume Review
+### 📝 LLM Resume Review
 
-1. Go to **LLM Resume Review** card.  
-2. Paste your resume text in the textarea.  
-3. Click **Run Review**.  
-4. AI feedback appears in a small scrollable card as bullet points.
+1. Navigate to **LLM Resume Review**
+2. Paste your resume text
+3. Click **Run Review**
+4. View AI feedback in a scrollable card
 
-### Resume ↔ Job Match
+---
 
-1. Go to **Resume ↔ Job Match** card.  
-2. Paste the target **Job Description**.  
-3. Click **Analyze Match**.  
+### 📈 Resume ↔ Job Match
+
+1. Open **Resume ↔ Job Match**
+2. Paste the Job Description
+3. Click **Analyze Match**
 4. View:
-   - Match percentage  
-   - Missing skills / keywords  
-   - Recommended edits in a scrollable box.
 
-You can also click **Use Example JD** to quickly test the flow.
-
-### Dream‑Role Roadmap
-
-1. Go to **Dream‑Role Roadmap** card.  
-2. Enter a role (e.g. `SDE intern at Meta`, `Senior SDE Salesforce`).  
-3. Click **Generate Roadmap** for a detailed multi‑step roadmap.  
-4. Or click **Quick 3‑Month Plan** for a condensed 3‑month plan.  
-
-Both responses are shown in a compact, scrollable card.
-
-### Templates Preview
-
-1. Scroll to the **Templates** section.  
-2. Each card shows:
-   - Template name  
-   - Short description  
-   - Preview button.  
-3. Click **Preview** to open that template in a new tab.
+   * Match percentage
+   * Missing skills
+   * Improvement suggestions
 
 ---
 
-## 🔧 Tech Details
+### 🎯 Dream-Role Roadmap
 
-- **Frontend**
-  - Tailwind CSS via CDN
-  - Vanilla JavaScript for:
-    - Tool interactions
-    - Fetch calls to backend
-    - Rendering scrollable bullet lists for AI output
-
-- **Backend**
-  - Express server exposing:
-    - `POST /api/llm/review`
-    - `POST /api/match`
-    - `POST /api/roadmap`
-  - Uses `OpenAI` Node client and Chat Completions API. [web:97]
-
-- **Design**
-  - Three AI tools visually aligned as cards
-  - Consistent scrollable response sections
-  - Mobile‑friendly layout
+1. Enter your target role
+2. Click **Generate Roadmap** for a detailed plan
+3. Or select **Quick 3-Month Plan** for a compact roadmap
 
 ---
 
-## 🧩 TODO / Future Improvements
+### 🎨 Template Preview
 
-- Resume upload + PDF/DOCX parsing for auto‑review.  
-- Auth + dashboard for saving multiple resumes.  
-- Export to PDF with layout‑aware templates.  
-- More templates and dark‑mode support.
+1. Scroll to **Templates**
+2. Click **Preview**
+3. View the resume template in a new browser tab
+
+---
+
+## 🎨 UI & Design Highlights
+
+* Card-based layout for AI tools
+* Scrollable response containers
+* Mobile-friendly & responsive design
+* Clean, minimal, ATS-focused UI
+
+---
+
+## 🔮 Future Enhancements
+
+* Resume upload (PDF / DOCX parsing)
+* Authentication & dashboard
+* Resume export as PDF
+* Dark mode support
+* More customizable templates
 
 ---
 
 ## 🤝 Contributing
 
-Pull requests are welcome!  
+Contributions are welcome!
 
-1. Fork the repo.  
-2. Create a feature branch: `git checkout -b feature/xyz`.  
-3. Commit changes: `git commit -m "feat: add xyz"`.  
-4. Push the branch: `git push origin feature/xyz`.  
-5. Open a PR on GitHub.
+1. Fork the repository
+2. Create a new branch:
+
+   ```bash
+   git checkout -b feature/your-feature
+   ```
+3. Commit changes:
+
+   ```bash
+   git commit -m "feat: add your feature"
+   ```
+4. Push to GitHub:
+
+   ```bash
+   git push origin feature/your-feature
+   ```
+5. Open a Pull Request 🚀
 
 ---
 
+Just tell me 👌
+```
