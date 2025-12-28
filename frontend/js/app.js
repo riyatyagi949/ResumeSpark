@@ -1,5 +1,9 @@
 // const apiBase = "https://resumespark.onrender.com/";
-const apiBase = "http://localhost:5001/api";
+// const apiBase = "http://localhost:5001/api";
+
+const apiBase = window.location.hostname.includes('render.com') 
+  ? 'https://resumespark-12.onrender.com'  // Render backend URL
+  : 'http://localhost:5001/api';             // Local dev
 
 
 document.addEventListener("DOMContentLoaded", () => {
